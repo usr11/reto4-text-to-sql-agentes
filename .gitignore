@@ -1,0 +1,9 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+.claude/
+.ipynb_checkpoints/
+# notebooks de referencia entregados por el profesor (no son parte de la solución)
+arquitectura_multiagente.ipynb
+arquitectura_multiagente_langgraph.ipynb

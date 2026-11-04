@@ -1,0 +1,1314 @@
+implementacion,config,dataset,id,nivel,sql,ruta,correcciones,latencia_s,sql_valido,correcta,fallo_sistema,llamadas_llm,tokens_entrada,tokens_salida,tokens_total,tokens_coordinacion,seg_llm,seg_coordinacion,costo_usd
+sin framework,A · único 1.5b,normal,s01,simple,SELECT COUNT(*) FROM clientes,,0,0.19740700000056677,True,True,False,1,228,11,239,0,0.19699375300024258,0.0,7.5e-06
+sin framework,A · único 1.5b,normal,s02,simple,SELECT COUNT(*) FROM clientes WHERE ciudad = 'Medellín',,0,0.22321733299941116,True,True,False,1,231,18,249,0,0.2230321160004678,0.0,8.01e-06
+sin framework,A · único 1.5b,normal,s03,simple,"SELECT p.nombre FROM productos p
+JOIN detalle_pedido dp ON p.id = dp.producto_id
+WHERE dp.precio_unitario = (SELECT MAX(precio_unitario) FROM detalle_pedido)",,0,0.4886891399992237,True,False,False,1,231,44,275,0,0.4884583160001057,0.0,9.57e-06
+sin framework,A · único 1.5b,normal,s04,simple,SELECT COUNT(*) FROM pedidos WHERE estado = 'cancelado',,0,0.22519082500002696,True,True,False,1,229,18,247,0,0.2250016960006178,0.0,7.95e-06
+sin framework,A · único 1.5b,normal,s05,simple,SELECT nombre FROM productos WHERE stock < 10,,0,0.22205819000009797,True,True,False,1,234,16,250,0,0.2218207309997524,0.0,7.98e-06
+sin framework,A · único 1.5b,normal,s06,simple,"SELECT AVG(precio) AS precio_promedio
+FROM productos",,0,0.24017075299980206,True,True,False,1,231,18,249,0,0.23998211300022376,0.0,8.01e-06
+sin framework,A · único 1.5b,normal,s07,simple,SELECT COUNT(*) FROM clientes WHERE segmento = 'premium',,0,0.2125942180000493,True,True,False,1,230,17,247,0,0.21234732999982953,0.0,7.92e-06
+sin framework,A · único 1.5b,normal,s08,simple,SELECT COUNT(*) FROM pedidos WHERE MONTH(fecha) = 3 AND YEAR(fecha) = 2025,,0,0.3759577180007909,False,False,False,1,237,31,268,0,0.37573541500023566,0.0,8.969999999999999e-06
+sin framework,A · único 1.5b,normal,s09,simple,SELECT DISTINCT ciudad FROM clientes,,0,0.1678396610004711,True,True,False,1,234,11,245,0,0.16753753099965252,0.0,7.68e-06
+sin framework,A · único 1.5b,normal,s10,simple,SELECT COUNT(*) FROM categorias,,0,0.1647341959996993,True,True,False,1,230,12,242,0,0.16437032599969825,0.0,7.619999999999999e-06
+sin framework,A · único 1.5b,normal,s11,simple,SELECT COUNT(*) FROM productos WHERE precio > 500000,,0,0.2712247310000748,True,True,False,1,238,21,259,0,0.27101562799998646,0.0,8.400000000000001e-06
+sin framework,A · único 1.5b,normal,s12,simple,SELECT COUNT(*) FROM clientes WHERE YEAR(fecha_registro) = 2025,,0,0.27649707499949727,False,False,False,1,234,23,257,0,0.27630710900029953,0.0,8.4e-06
+sin framework,A · único 1.5b,normal,c01,compleja,SELECT COUNT(*) FROM productos WHERE categoria_id IN (SELECT id FROM categorias WHERE nombre LIKE 'Electrónica'),,0,0.32784787899981893,True,True,False,1,232,28,260,0,0.3276547700006631,0.0,8.64e-06
+sin framework,A · único 1.5b,normal,c02,compleja,"SELECT SUM(precio_unitario * cantidad) AS total_vendido
+FROM detalle_pedido
+JOIN pedidos ON detalle_pedido.pedido_id = pedidos.id
+JOIN productos ON detalle_pedido.producto_id = productos.id
+WHERE pedidos.estado = 'entregado'",,0,0.6859613100004935,True,True,False,1,242,60,302,0,0.6857503909996012,0.0,1.086e-05
+sin framework,A · único 1.5b,normal,c03,compleja,"SELECT c.nombre
+FROM clientes c
+JOIN pedidos p ON c.id = p.cliente_id
+JOIN detalle_pedido dp ON p.id = dp.pedido_id
+WHERE p.estado = 'entregado'
+GROUP BY c.id
+ORDER BY SUM(dp.cantidad * dp.precio_unitario) DESC
+LIMIT 3",,0,0.806585448000078,True,True,False,1,243,72,315,0,0.8063881489997584,0.0,1.1609999999999999e-05
+sin framework,A · único 1.5b,normal,c04,compleja,"SELECT c.ciudad
+FROM clientes c
+JOIN pedidos p ON c.id = p.cliente_id
+WHERE p.estado IN ('entregado', 'pendiente', 'cancelado')
+GROUP BY c.ciudad
+ORDER BY COUNT(p.id) DESC
+LIMIT 1",,0,0.6720343159995537,True,True,False,1,230,62,292,0,0.6718497259998912,0.0,1.062e-05
+sin framework,A · único 1.5b,normal,c05,compleja,"SELECT c.nombre, SUM(p.precio * dp.cantidad) as total
+FROM categorias c
+JOIN productos p ON c.id = p.categoria_id
+JOIN detalle_pedido dp ON p.id = dp.producto_id
+JOIN pedidos pe ON dp.pedido_id = pe.id
+WHERE pe.estado = 'entregado'
+GROUP BY c.nombre",,0,0.8639091880004344,True,True,False,1,245,78,323,0,0.8636930310003663,0.0,1.203e-05
+sin framework,A · único 1.5b,normal,c06,compleja,"SELECT p.nombre
+FROM productos p
+JOIN detalle_pedido dp ON p.id = dp.producto_id
+JOIN pedidos pe ON dp.pedido_id = pe.id
+WHERE pe.estado IN ('entregado', 'pendiente', 'cancelado')
+GROUP BY p.id
+ORDER BY SUM(dp.cantidad) DESC
+LIMIT 1",,0,0.8191757310005414,True,True,False,1,238,74,312,0,0.8183268169996154,0.0,1.1579999999999998e-05
+sin framework,A · único 1.5b,normal,c07,compleja,"SELECT c.nombre FROM clientes c
+WHERE c.id NOT IN (
+    SELECT p.cliente_id FROM pedidos p
+)",,0,0.36486620499999844,True,True,False,1,232,30,262,0,0.3644581950002248,0.0,8.759999999999999e-06
+sin framework,A · único 1.5b,normal,c08,compleja,"SELECT AVG(precio_unitario * cantidad) AS promedio_pedido_entregado
+FROM detalle_pedido
+JOIN pedidos ON detalle_pedido.pedido_id = pedidos.id
+WHERE pedidos.estado = 'entregado'",,0,0.5727345989998867,True,False,False,1,239,50,289,0,0.5724212940003781,0.0,1.017e-05
+sin framework,A · único 1.5b,normal,c09,compleja,"SELECT COUNT(DISTINCT c.id) 
+FROM clientes c 
+JOIN pedidos p ON c.id = p.cliente_id 
+JOIN detalle_pedido dp ON p.id = dp.pedido_id 
+JOIN productos pr ON dp.producto_id = pr.id 
+WHERE c.segmento = 'premium' 
+  AND c.ciudad LIKE 'Bogotá' 
+  AND p.estado = 'cancelado'",,0,0.9529271519995746,True,True,False,1,237,87,324,0,0.9526079810002557,0.0,1.2329999999999999e-05
+sin framework,A · único 1.5b,normal,c10,compleja,"SELECT p.nombre FROM productos p
+WHERE p.id NOT IN (
+    SELECT dp.producto_id FROM detalle_pedido dp
+    JOIN pedidos p ON dp.pedido_id = p.id
+    WHERE p.estado IN ('entregado', 'pendiente', 'cancelado')
+)",,0,0.6938231949998226,True,True,False,1,232,62,294,0,0.6936286879999898,0.0,1.068e-05
+sin framework,A · único 1.5b,normal,c11,compleja,"SELECT T2.segmento, COUNT(*) AS cantidad
+FROM pedidos AS T1
+JOIN clientes AS T2 ON T1.cliente_id = T2.id
+WHERE T1.estado IN ('entregado', 'pendiente', 'cancelado')
+GROUP BY T2.segmento",,0,0.7318426040001214,True,True,False,1,240,64,304,0,0.731305247999444,0.0,1.104e-05
+sin framework,A · único 1.5b,normal,c12,compleja,"SELECT c.nombre
+FROM clientes c
+JOIN pedidos p ON c.id = p.cliente_id
+JOIN detalle_pedido dp ON p.id = dp.pedido_id
+WHERE p.estado IN ('entregado', 'pendiente', 'cancelado')
+  AND c.segmento IN ('normal', 'premium')
+  AND c.ciudad LIKE 'Bogotá'
+  AND c.ciudad LIKE 'Medellín'
+  AND c.categorias.nombre LIKE 'Electrónica'
+  AND dp.precio_unitario * dp.cantidad > (
+    SELECT MAX(precio_unitario * cantidad)
+    FROM detalle_pedido
+    WHERE p.estado IN ('entregado', 'pendiente', 'cancelado')
+      AND c.segmento IN ('normal', 'premium')
+      AND c.ciudad LIKE 'Bogotá'
+      AND c.ciudad LIKE 'Medellín'
+      AND c.categorias.nombre LIKE 'Electrónica'
+  )",,0,2.0933221060004144,False,False,False,1,236,198,434,0,2.093132627999694,0.0,1.896e-05
+sin framework,A · único 1.5b,ruido,r01,simple,SELECT COUNT(*) FROM clientes WHERE ciudad = 'Medellín',,0,0.2257892580000771,True,True,False,1,229,18,247,0,0.2255782000002,0.0,7.95e-06
+sin framework,A · único 1.5b,ruido,r02,simple,SELECT COUNT(*) FROM pedidos WHERE estado = 'cancelado',,0,0.22705204900012177,True,True,False,1,227,18,245,0,0.2268580310001198,0.0,7.889999999999999e-06
+sin framework,A · único 1.5b,ruido,r03,simple,"SELECT p.nombre
+FROM productos p
+JOIN detalle_pedido dp ON p.id = dp.producto_id
+JOIN pedidos pe ON dp.pedido_id = pe.id
+WHERE pe.estado IN ('entregado', 'pendiente', 'cancelado')
+  AND p.categoria_id IN (SELECT id FROM categorias WHERE nombre IN ('Electrónica'))
+  AND pe.fecha BETWEEN '2023-01-01' AND '2023-12-31'
+  AND p.precio * dp.cantidad > 1000000
+ORDER BY dp.cantidad DESC
+LIMIT 1",,0,1.4635828259997652,True,False,False,1,232,137,369,0,1.463351583000076,0.0,1.518e-05
+sin framework,A · único 1.5b,ruido,r04,simple,SELECT COUNT(*) FROM clientes WHERE segmento = 'premium',,0,0.2168641779999234,True,True,False,1,228,17,245,0,0.21655506400020386,0.0,7.86e-06
+sin framework,A · único 1.5b,ruido,r05,simple,"SELECT COUNT(*) 
+FROM pedidos 
+WHERE MONTH(fecha) = 3 AND YEAR(fecha) = 2025",,0,0.39878397099982976,False,False,False,1,238,33,271,0,0.3985299590003706,0.0,9.119999999999999e-06
+sin framework,A · único 1.5b,ruido,r06,simple,"SELECT COUNT(*) 
+FROM productos 
+WHERE precio > 500000",,0,0.2950581349996355,True,True,False,1,232,23,255,0,0.29484358500030794,0.0,8.34e-06
+sin framework,A · único 1.5b,ruido,r07,compleja,SELECT COUNT(*) FROM productos WHERE categoria_id IN (SELECT id FROM categorias WHERE nombre LIKE 'Electrónica'),,0,0.3376694300004601,True,True,False,1,227,28,255,0,0.33747548300016206,0.0,8.49e-06
+sin framework,A · único 1.5b,ruido,r08,compleja,"SELECT c.ciudad
+FROM clientes c
+JOIN pedidos p ON c.id = p.cliente_id
+WHERE p.estado IN ('entregado', 'pendiente', 'cancelado')
+GROUP BY c.ciudad
+ORDER BY COUNT(p.id) DESC
+LIMIT 1",,0,0.6786025199999131,True,True,False,1,225,62,287,0,0.6783841980004581,0.0,1.047e-05
+sin framework,A · único 1.5b,ruido,r09,compleja,"SELECT p.nombre, SUM(dp.cantidad) AS total_vendido
+FROM productos p
+JOIN detalle_pedido dp ON p.id = dp.producto_id
+JOIN pedidos pe ON dp.pedido_id = pe.id
+WHERE pe.estado IN ('entregado', 'pendiente', 'cancelado')
+  AND p.categoria_id IN (SELECT id FROM categorias WHERE nombre LIKE 'Electrónica')
+  AND pe.fecha BETWEEN '2023-01-01' AND '2023-12-31'
+GROUP BY p.nombre
+ORDER BY total_vendido DESC
+LIMIT 1",,0,1.4288880470003278,True,False,False,1,226,135,361,0,1.4285215930003687,0.0,1.488e-05
+sin framework,A · único 1.5b,ruido,r10,compleja,"SELECT c.*
+FROM clientes c
+WHERE c.id NOT IN (
+    SELECT p.cliente_id
+    FROM productos p
+    JOIN detalle_pedido dp ON p.id = dp.producto_id
+)",,0,0.505871893999938,False,False,False,1,227,45,272,0,0.5055581679998795,0.0,9.51e-06
+sin framework,A · único 1.5b,ruido,r11,compleja,"SELECT p.*
+FROM productos p
+WHERE p.id NOT IN (
+    SELECT dp.producto_id
+    FROM detalle_pedido dp
+    WHERE dp.pedido_id IN (
+        SELECT p.id
+        FROM pedidos p
+        WHERE p.estado IN ('entregado', 'pendiente', 'cancelado')
+    )
+)",,0,0.7761562840005354,True,True,False,1,229,71,300,0,0.7759571679998771,0.0,1.1129999999999998e-05
+sin framework,A · único 1.5b,ruido,r12,compleja,"SELECT p.cliente_id, c.nombre, p.segmento, p.fecha
+FROM pedidos p
+JOIN clientes c ON p.cliente_id = c.id
+WHERE p.segmento IN ('normal', 'premium')
+  AND c.ciudad IN ('Bogotá', 'Medellín')
+  AND p.fecha LIKE '2023-01-%'
+  AND p.precio_unitario > 0",,0,0.9909571130001495,False,False,False,1,226,92,318,0,0.990768403000402,0.0,1.2299999999999999e-05
+sin framework,B · único 3b,normal,s01,simple,SELECT COUNT(*) FROM clientes,,0,0.4990056590004315,True,True,False,1,228,11,239,0,0.49882630800038896,0.0,1.5e-05
+sin framework,B · único 3b,normal,s02,simple,"SELECT COUNT(*) AS cantidad_clientes
+FROM clientes
+WHERE ciudad = 'Medellín'",,0,0.7483214249996308,True,True,False,1,231,24,255,0,0.7481364859995665,0.0,1.674e-05
+sin framework,B · único 3b,normal,s03,simple,SELECT nombre FROM productos ORDER BY precio DESC LIMIT 1,,0,0.5733889090006414,True,True,False,1,231,17,248,0,0.5719832249997125,0.0,1.59e-05
+sin framework,B · único 3b,normal,s04,simple,"SELECT COUNT(*) AS cantidad_cancelados
+FROM pedidos
+WHERE estado = 'cancelado'",,0,0.7601106240008448,True,True,False,1,229,24,253,0,0.7598954450004385,0.0,1.662e-05
+sin framework,B · único 3b,normal,s05,simple,SELECT nombre FROM productos WHERE stock < 10,,0,0.5956628739995722,True,True,False,1,234,16,250,0,0.5954717200002051,0.0,1.596e-05
+sin framework,B · único 3b,normal,s06,simple,"SELECT AVG(precio) AS precio_promedio
+FROM productos",,0,0.6589232189999166,True,True,False,1,231,18,249,0,0.6587442869995357,0.0,1.602e-05
+sin framework,B · único 3b,normal,s07,simple,"SELECT COUNT(*) AS cantidad_premium
+FROM clientes
+WHERE segmento = 'premium'",,0,0.7225051109999185,True,True,False,1,230,23,253,0,0.7223156340005517,0.0,1.6559999999999997e-05
+sin framework,B · único 3b,normal,s08,simple,"SELECT COUNT(*) AS cantidad_pedidos
+FROM pedidos
+WHERE fecha LIKE '2025-03-%'",,0,0.9712421270005507,True,True,False,1,237,30,267,0,0.971060051000677,0.0,1.782e-05
+sin framework,B · único 3b,normal,s09,simple,SELECT DISTINCT ciudad FROM clientes,,0,0.4653131969998867,True,True,False,1,234,11,245,0,0.4651128929999686,0.0,1.536e-05
+sin framework,B · único 3b,normal,s10,simple,SELECT COUNT(DISTINCT nombre) FROM categorias,,0,0.5435964259995671,True,True,False,1,230,16,246,0,0.5433913739998388,0.0,1.572e-05
+sin framework,B · único 3b,normal,s11,simple,"SELECT COUNT(*) 
+FROM productos 
+WHERE precio > 500000",,0,0.8003604479999922,True,True,False,1,238,23,261,0,0.8001727159999064,0.0,1.704e-05
+sin framework,B · único 3b,normal,s12,simple,"SELECT COUNT(*) AS cantidad_clientes
+FROM clientes
+WHERE fecha_registro LIKE '2025-%'",,0,0.8416369609994945,True,True,False,1,234,27,261,0,0.8414314190004006,0.0,1.7279999999999997e-05
+sin framework,B · único 3b,normal,c01,compleja,"SELECT COUNT(*) 
+FROM productos 
+JOIN categorias ON productos.categoria_id = categorias.id 
+WHERE categorias.nombre = 'Electrónica'",,0,1.0642421709999326,True,True,False,1,232,35,267,0,1.0640614240001014,0.0,1.812e-05
+sin framework,B · único 3b,normal,c02,compleja,"SELECT SUM(precio_unitario * cantidad) AS total_vendido
+FROM detalle_pedido dp
+JOIN pedidos p ON dp.pedido_id = p.id
+WHERE p.estado = 'entregado'",,0,1.467677008999999,True,True,False,1,242,47,289,0,1.4674918609998713,0.0,2.016e-05
+sin framework,B · único 3b,normal,c03,compleja,"SELECT c.nombre
+FROM clientes c
+JOIN pedidos p ON c.id = p.cliente_id
+JOIN detalle_pedido dp ON p.id = dp.pedido_id
+WHERE p.estado = 'entregado'
+GROUP BY c.id
+ORDER BY SUM(dp.cantidad * dp.precio_unitario) DESC
+LIMIT 3",,0,2.1659376450006675,True,True,False,1,243,72,315,0,2.1657204400007686,0.0,2.3219999999999998e-05
+sin framework,B · único 3b,normal,c04,compleja,"SELECT c.ciudad
+FROM clientes c
+JOIN pedidos p ON c.id = p.cliente_id
+WHERE p.estado IN ('entregado', 'pendiente', 'cancelado')
+GROUP BY c.ciudad
+ORDER BY COUNT(p.id) DESC
+LIMIT 1",,0,1.810760790999666,True,True,False,1,230,62,292,0,1.8105474980002327,0.0,2.124e-05
+sin framework,B · único 3b,normal,c05,compleja,"SELECT c.nombre, SUM(p.precio * dp.cantidad) AS total
+FROM categorias c
+JOIN productos p ON c.id = p.categoria_id
+JOIN detalle_pedido dp ON p.id = dp.producto_id
+JOIN pedidos pe ON dp.pedido_id = pe.id
+WHERE pe.estado = 'entregado'
+GROUP BY c.nombre",,0,2.334484710000652,True,True,False,1,245,78,323,0,2.33429774599972,0.0,2.406e-05
+sin framework,B · único 3b,normal,c06,compleja,"SELECT p.nombre
+FROM productos p
+JOIN detalle_pedido dp ON p.id = dp.producto_id
+GROUP BY p.id
+ORDER BY SUM(dp.cantidad) DESC
+LIMIT 1",,0,1.3673707650004872,True,True,False,1,238,44,282,0,1.3671844989994497,0.0,1.956e-05
+sin framework,B · único 3b,normal,c07,compleja,SELECT nombre FROM clientes WHERE id NOT IN (SELECT cliente_id FROM pedidos),,0,0.7318297600004371,True,True,False,1,232,21,253,0,0.7316546000001836,0.0,1.6440000000000002e-05
+sin framework,B · único 3b,normal,c08,compleja,"SELECT AVG(precio_unitario * cantidad) AS promedio_precio
+FROM detalle_pedido dp
+JOIN pedidos p ON dp.pedido_id = p.id
+WHERE p.estado = 'entregado'",,0,1.4460832810000284,True,False,False,1,239,47,286,0,1.4458997399997315,0.0,1.9980000000000002e-05
+sin framework,B · único 3b,normal,c09,compleja,"SELECT COUNT(DISTINCT c.id) AS cantidad
+FROM clientes c
+JOIN pedidos p ON c.id = p.cliente_id
+WHERE c.segmento = 'premium' AND c.ciudad = 'Bogotá' AND p.estado = 'cancelado'",,0,1.8179510810005013,True,True,False,1,237,60,297,0,1.8177666310002678,0.0,2.1419999999999998e-05
+sin framework,B · único 3b,normal,c10,compleja,"SELECT p.nombre
+FROM productos p
+LEFT JOIN detalle_pedido dp ON p.id = dp.producto_id
+WHERE dp.producto_id IS NULL",,0,1.128598459999921,True,True,False,1,232,35,267,0,1.1283848870007205,0.0,1.812e-05
+sin framework,B · único 3b,normal,c11,compleja,"SELECT segmento, COUNT(*) AS cantidad
+FROM clientes
+WHERE segmento IN ('normal', 'premium')
+GROUP BY segmento",,0,1.0721302730007665,True,False,False,1,240,32,272,0,1.0719454750005752,0.0,1.8239999999999998e-05
+sin framework,B · único 3b,normal,c12,compleja,"SELECT c.nombre
+FROM clientes c
+JOIN pedidos p ON c.id = p.cliente_id
+JOIN detalle_pedido dp ON p.id = dp.pedido_id
+WHERE p.estado = 'entregado'
+GROUP BY c.id
+ORDER BY SUM(dp.cantidad * dp.precio_unitario) DESC
+LIMIT 1",,0,2.1591363919997093,True,False,False,1,236,72,308,0,2.158951313000216,0.0,2.2800000000000002e-05
+sin framework,B · único 3b,ruido,r01,simple,"SELECT COUNT(*) AS cantidad_clientes
+FROM clientes
+WHERE ciudad = 'Medellín'",,0,0.7697053210004015,True,True,False,1,229,24,253,0,0.7694963569992979,0.0,1.662e-05
+sin framework,B · único 3b,ruido,r02,simple,"SELECT COUNT(*) AS numero_pedidos_cancelados
+FROM pedidos
+WHERE estado = 'cancelado'",,0,0.8108851839997442,True,True,False,1,227,26,253,0,0.8106730780000362,0.0,1.674e-05
+sin framework,B · único 3b,ruido,r03,simple,"SELECT p.nombre, SUM(p.precio * dp.cantidad) AS total_costo
+FROM productos p
+JOIN detalle_pedido dp ON p.id = dp.producto_id
+WHERE p.categoria_id = (SELECT c.id FROM categorias c WHERE c.nombre = 'Electrónica')
+GROUP BY p.id
+ORDER BY total_costo DESC
+LIMIT 1",,0,2.321471491999546,True,True,False,1,232,79,311,0,2.3212803379992692,0.0,2.34e-05
+sin framework,B · único 3b,ruido,r04,simple,"SELECT COUNT(*) AS cantidad_premiun
+FROM clientes
+WHERE segmento = 'premium'",,0,0.7815395269999499,True,True,False,1,228,25,253,0,0.7813510970008792,0.0,1.668e-05
+sin framework,B · único 3b,ruido,r05,simple,"SELECT COUNT(*) AS cantidad_pedidos
+FROM pedidos
+WHERE fecha LIKE '2025-03-%'
+  AND estado IN ('entregado', 'pendiente', 'cancelado')",,0,1.4626755119998052,True,True,False,1,238,47,285,0,1.4624884079994445,0.0,1.992e-05
+sin framework,B · único 3b,ruido,r06,simple,"SELECT COUNT(*) 
+FROM productos 
+WHERE precio > 500000",,0,0.8335823709994656,True,True,False,1,232,23,255,0,0.8333662139993976,0.0,1.668e-05
+sin framework,B · único 3b,ruido,r07,compleja,"SELECT COUNT(*) 
+FROM productos 
+JOIN categorias ON productos.categoria_id = categorias.id 
+WHERE categorias.nombre = 'Electrónica'",,0,1.1189023530005215,True,True,False,1,227,35,262,0,1.1185963110001467,0.0,1.782e-05
+sin framework,B · único 3b,ruido,r08,compleja,"SELECT c.ciudad, COUNT(p.id) AS cantidad_pedidos
+FROM clientes c
+JOIN pedidos p ON c.id = p.cliente_id
+WHERE c.segmento IN ('normal', 'premium')
+GROUP BY c.ciudad
+ORDER BY cantidad_pedidos DESC
+LIMIT 1",,0,1.9169236730003831,True,True,False,1,225,64,289,0,1.9166174910005793,0.0,2.118e-05
+sin framework,B · único 3b,ruido,r09,compleja,"SELECT p.nombre, SUM(dp.cantidad) AS unidades_vendidas
+FROM productos p
+JOIN detalle_pedido dp ON p.id = dp.producto_id
+WHERE dp.precio_unitario > 0
+GROUP BY p.id
+ORDER BY unidades_vendidas DESC
+LIMIT 1",,0,1.9121959889998834,True,True,False,1,226,64,290,0,1.9113481220001631,0.0,2.124e-05
+sin framework,B · único 3b,ruido,r10,compleja,"SELECT id, nombre, ciudad, segmento, fecha_registro
+FROM clientes
+WHERE id NOT IN (SELECT cliente_id FROM pedidos)",,0,1.1029577070003143,True,True,False,1,227,33,260,0,1.1027259759994195,0.0,1.7579999999999998e-05
+sin framework,B · único 3b,ruido,r11,compleja,"SELECT p.id, p.nombre, p.categoria_id, p.precio, p.stock
+FROM productos p
+LEFT JOIN detalle_pedido dp ON p.id = dp.producto_id
+WHERE dp.producto_id IS NULL",,0,1.5244963419991109,True,True,False,1,229,50,279,0,1.5242799750003542,0.0,1.974e-05
+sin framework,B · único 3b,ruido,r12,compleja,"SELECT c.segmento, COUNT(p.id) AS cantidad_pedidos
+FROM clientes c
+JOIN pedidos p ON c.id = p.cliente_id
+WHERE c.segmento IN ('normal', 'premium')
+GROUP BY c.segmento",,0,1.6714114550004524,True,True,False,1,226,53,279,0,1.6712207210002816,0.0,1.992e-05
+sin framework,C · router,normal,s01,simple,SELECT COUNT(*) FROM clientes,simple,0,0.5204969939995863,True,True,False,2,348,13,361,190,0.520007828999951,0.08326542200029508,1.1220000000000001e-05
+sin framework,C · router,normal,s02,simple,SELECT COUNT(*) FROM clientes WHERE ciudad = 'Medellín',simple,0,0.30819551200056594,True,True,False,2,354,20,374,193,0.30771912799991696,0.06915842499984137,1.1819999999999999e-05
+sin framework,C · router,normal,s03,simple,SELECT nombre FROM productos ORDER BY precio DESC LIMIT 1,simple,0,0.2886136289998831,True,True,False,2,354,19,373,193,0.28827043199999025,0.06509830200047872,1.176e-05
+sin framework,C · router,normal,s04,simple,SELECT COUNT(*) FROM pedidos WHERE estado = 'cancelado',simple,0,0.3159339429994361,True,True,False,2,350,21,371,192,0.3156246180005837,0.07930845500050054,1.176e-05
+sin framework,C · router,normal,s05,simple,SELECT nombre FROM productos WHERE stock < 10,simple,0,0.31126536699957796,True,True,False,2,360,18,378,196,0.3109614210006839,0.08113856300042244,1.188e-05
+sin framework,C · router,normal,s06,simple,SELECT AVG(precio) FROM productos,compleja,0,0.602718310000455,True,True,False,2,624,18,642,196,0.6023848899994846,0.11054620599952614,3.357e-05
+sin framework,C · router,normal,s07,simple,SELECT COUNT(*) FROM clientes WHERE segmento = 'premium',simple,0,0.2840435340003751,True,True,False,2,352,19,371,192,0.28372226699957537,0.060752810999474605,1.17e-05
+sin framework,C · router,normal,s08,simple,SELECT COUNT(*) FROM pedidos WHERE MONTH(fecha) = 3 AND YEAR(fecha) = 2025,simple,0,0.4842245069994533,False,False,False,2,366,34,400,200,0.48391043300034653,0.09059912399970926,1.302e-05
+sin framework,C · router,normal,s09,simple,SELECT DISTINCT ciudad FROM clientes,simple,0,0.2578717559999859,True,True,False,2,360,13,373,196,0.25754804400003195,0.08370786700015742,1.158e-05
+sin framework,C · router,normal,s10,simple,SELECT COUNT(*) FROM categorias,simple,0,0.23616573300023447,True,True,False,2,352,14,366,192,0.23583405899989884,0.06666937299996789,1.14e-05
+sin framework,C · router,normal,s11,simple,SELECT COUNT(*) FROM productos WHERE precio > 500000,simple,0,0.3627581389991974,True,True,False,2,368,23,391,200,0.3623015899993334,0.08323734999976296,1.242e-05
+sin framework,C · router,normal,s12,simple,SELECT COUNT(*) FROM clientes WHERE YEAR(fecha_registro) = 2025,simple,0,0.358934988999863,False,False,False,2,360,25,385,196,0.3585528900002828,0.0684592520001388,1.2299999999999999e-05
+sin framework,C · router,normal,c01,compleja,SELECT COUNT(*) FROM productos WHERE categoria_id IN (SELECT id FROM categorias WHERE nombre = 'Electrónica'),compleja,0,0.9987134200000582,True,True,False,2,626,33,659,197,0.9984036760006347,0.09579835300064587,3.546e-05
+sin framework,C · router,normal,c02,compleja,"SELECT SUM(d.cantidad * d.precio_unitario) AS total_vendido
+FROM detalle_pedido d
+JOIN pedidos p ON p.id = d.pedido_id
+WHERE p.estado = 'entregado'",compleja,0,1.7389281480000136,True,True,False,2,646,58,704,210,1.7385511480006244,0.16096035600003233,3.918e-05
+sin framework,C · router,normal,c03,compleja,"SELECT c.nombre FROM clientes c
+JOIN pedidos p ON p.cliente_id = c.id
+JOIN detalle_pedido dp ON dp.pedido_id = p.id
+WHERE p.estado = 'entregado'
+GROUP BY c.id
+ORDER BY SUM(dp.cantidad * dp.precio_unitario) DESC
+LIMIT 3",compleja,0,2.3267277909999393,True,True,False,2,648,76,724,208,2.3259507439997833,0.1204554329997336,4.1609999999999996e-05
+sin framework,C · router,normal,c04,compleja,"SELECT c.ciudad, COUNT(*) AS num_pedidos FROM clientes c JOIN pedidos p ON p.cliente_id = c.id WHERE p.estado IN ('entregado', 'pendiente', 'cancelado') GROUP BY c.ciudad ORDER BY num_pedidos DESC LIMIT 1",compleja,0,1.9624800499996127,True,True,False,2,622,68,690,195,1.9621560569994472,0.0928086149997398,3.9479999999999995e-05
+sin framework,C · router,normal,c05,compleja,"SELECT c.nombre, SUM(d.cantidad * d.precio_unitario) AS total
+FROM detalle_pedido d
+JOIN productos p ON p.id = d.producto_id
+JOIN pedidos pe ON pe.id = d.pedido_id
+JOIN categorias c ON c.id = p.categoria_id
+WHERE pe.estado = 'entregado'
+GROUP BY c.nombre",compleja,0,2.5907148910000615,True,True,False,2,652,90,742,215,2.5903107230005844,0.17573748900031205,4.317e-05
+sin framework,C · router,normal,c06,compleja,"SELECT pr.nombre FROM detalle_pedido d JOIN productos pr ON pr.id = d.producto_id
+GROUP BY pr.id ORDER BY SUM(d.cantidad) DESC LIMIT 1",compleja,0,1.4482645480002247,True,True,False,2,638,45,683,203,1.447928753999804,0.10498976199960453,3.744e-05
+sin framework,C · router,normal,c07,compleja,"SELECT c.nombre FROM clientes c
+WHERE c.id NOT IN (
+    SELECT p.cliente_id FROM pedidos p
+)",simple,0,0.4548438930005432,True,True,False,2,356,32,388,194,0.4545129160005672,0.07641119300024002,1.26e-05
+sin framework,C · router,normal,c08,compleja,SELECT AVG(SUM(d.cantidad * d.precio_unitario)) AS promedio FROM detalle_pedido d JOIN pedidos p ON p.id = d.pedido_id WHERE p.estado = 'entregado',compleja,0,1.5978302969997458,False,False,False,2,640,53,693,205,1.5975371739996262,0.12162911999985226,3.8429999999999996e-05
+sin framework,C · router,normal,c09,compleja,"SELECT COUNT(c.id) FROM clientes c
+JOIN pedidos p ON p.cliente_id = c.id
+WHERE c.segmento = 'premium' AND c.ciudad = 'Bogotá' AND p.estado = 'cancelado'",compleja,0,1.8053163360000326,True,True,False,2,636,59,695,202,1.805002330998832,0.11462646599920845,3.903e-05
+sin framework,C · router,normal,c10,compleja,SELECT nombre FROM productos WHERE id NOT IN (SELECT producto_id FROM detalle_pedido),simple,0,0.3463742600006299,True,True,False,2,356,23,379,194,0.3460276399991926,0.07655150699974911,1.206e-05
+sin framework,C · router,normal,c11,compleja,"SELECT c.segmento, COUNT(*) AS cantidad FROM clientes c
+JOIN pedidos p ON p.cliente_id = c.id
+WHERE p.estado IN ('entregado', 'pendiente', 'cancelado')
+GROUP BY c.segmento",compleja,0,1.7913074379994214,True,True,False,2,642,59,701,205,1.790999510999427,0.1246860569999626,3.93e-05
+sin framework,C · router,normal,c12,compleja,"SELECT c.nombre FROM clientes c JOIN pedidos p ON c.id = p.cliente_id
+JOIN detalle_pedido dp ON p.id = dp.pedido_id
+GROUP BY c.id
+ORDER BY SUM(dp.cantidad * dp.precio_unitario) DESC
+LIMIT 1",compleja,0,2.0040759049998087,True,False,False,2,634,66,700,201,2.0037493290001294,0.10656942900004651,3.9779999999999995e-05
+sin framework,C · router,ruido,r01,simple,SELECT COUNT(*) FROM clientes WHERE ciudad = 'Medellín',simple,0,0.29602353799964476,True,True,False,2,350,20,370,191,0.2957046439996702,0.059502047000023595,1.17e-05
+sin framework,C · router,ruido,r02,simple,SELECT COUNT(*) FROM pedidos WHERE estado = 'cancelado',simple,0,0.3150149250004688,True,True,False,2,346,21,367,190,0.3146776650000902,0.07568890800030204,1.1639999999999999e-05
+sin framework,C · router,ruido,r03,simple,"SELECT p.nombre FROM productos p
+JOIN detalle_pedido dp ON p.id = dp.producto_id
+JOIN pedidos pe ON dp.pedido_id = pe.id
+WHERE pe.estado IN ('entregado', 'pendiente', 'cancelado')
+AND p.segmento IN ('normal', 'premium')
+AND pe.fecha BETWEEN 'YYYY-MM-DD' AND 'YYYY-MM-DD'
+ORDER BY dp.cantidad DESC
+LIMIT 1",simple,0,1.1283859400000438,False,False,False,2,356,94,450,194,1.1276933989993267,0.08735127299951273,1.632e-05
+sin framework,C · router,ruido,r04,simple,SELECT COUNT(*) FROM clientes WHERE segmento = 'premium',simple,0,0.2922244849996787,True,True,False,2,348,19,367,190,0.2918833130006533,0.066252650000024,1.1580000000000001e-05
+sin framework,C · router,ruido,r05,simple,"SELECT COUNT(*) 
+FROM pedidos 
+WHERE MONTH(fecha) = 3 AND YEAR(fecha) = 2025",simple,0,0.5043163709997316,False,False,False,2,368,36,404,201,0.5038996310004222,0.09159459100010281,1.3199999999999999e-05
+sin framework,C · router,ruido,r06,simple,SELECT COUNT(*) FROM productos WHERE precio > 500000,simple,0,0.36556577000010293,True,True,False,2,356,23,379,194,0.36526105499979167,0.08154170799934946,1.206e-05
+sin framework,C · router,ruido,r07,compleja,SELECT COUNT(*) FROM productos WHERE categoria_id IN (SELECT id FROM categorias WHERE nombre = 'Electrónica'),compleja,0,0.9815604410005108,True,True,False,2,616,33,649,192,0.9811888190006357,0.09651976500026649,3.501e-05
+sin framework,C · router,ruido,r08,compleja,"SELECT c.ciudad, COUNT(*) AS total_pedidos FROM pedidos p JOIN clientes c ON c.id = p.cliente_id WHERE p.estado IN ('entregado', 'pendiente', 'cancelado') GROUP BY c.ciudad ORDER BY total_pedidos DESC LIMIT 1",compleja,0,1.9644027750000532,True,True,False,2,612,68,680,190,1.9640588790007314,0.09466060400063725,3.903e-05
+sin framework,C · router,ruido,r09,compleja,"SELECT pr.nombre, SUM(d.cantidad) AS total_vendido
+FROM detalle_pedido d
+JOIN productos pr ON pr.id = d.producto_id
+GROUP BY pr.id
+ORDER BY total_vendido DESC
+LIMIT 1",compleja,0,1.8057811030002995,True,True,False,2,614,59,673,191,1.8054469850003443,0.09025016000032338,3.8039999999999995e-05
+sin framework,C · router,ruido,r10,compleja,"SELECT id, nombre, ciudad, segmento, fecha_registro
+FROM clientes
+WHERE id NOT IN (
+    SELECT cliente_id
+    FROM detalle_pedido
+)",simple,0,0.5031497849995503,False,False,False,2,346,39,385,189,0.5027171219999218,0.060079356999267475,1.2719999999999998e-05
+sin framework,C · router,ruido,r11,compleja,"SELECT p.*
+FROM productos p
+WHERE p.id NOT IN (
+    SELECT dp.producto_id
+    FROM detalle_pedido dp
+    WHERE dp.pedido_id IN (
+        SELECT p.id
+        FROM pedidos p
+        WHERE p.estado IN ('entregado', 'pendiente', 'cancelado')
+    )
+)",simple,0,0.8670540020002591,True,True,False,2,350,73,423,191,0.8665626720003274,0.06535478200021316,1.488e-05
+sin framework,C · router,ruido,r12,compleja,"SELECT c.segmento, COUNT(*) AS cantidad_pedidos FROM clientes c
+JOIN pedidos p ON p.cliente_id = c.id
+WHERE p.estado IN ('entregado', 'pendiente', 'cancelado')
+GROUP BY c.segmento",compleja,0,1.798769644999993,True,True,False,2,614,61,675,191,1.7984380409998266,0.09557301000040752,3.828e-05
+sin framework,E · router + evaluador,normal,s01,simple,SELECT COUNT(*) FROM clientes,simple,0,0.22498728499977005,True,True,False,2,348,13,361,190,0.22428999399926397,0.06443382499946892,1.1220000000000001e-05
+sin framework,E · router + evaluador,normal,s02,simple,SELECT COUNT(*) FROM clientes WHERE ciudad = 'Medellín',simple,0,0.30943616600052337,True,True,False,2,354,20,374,193,0.308820657999604,0.0688053719995878,1.1819999999999999e-05
+sin framework,E · router + evaluador,normal,s03,simple,SELECT nombre FROM productos ORDER BY precio DESC LIMIT 1,simple,0,0.29456076699989353,True,True,False,2,354,19,373,193,0.2939196279994576,0.0654749429995718,1.176e-05
+sin framework,E · router + evaluador,normal,s04,simple,SELECT COUNT(*) FROM pedidos WHERE estado = 'cancelado',simple,0,0.3190290160000586,True,True,False,2,350,21,371,192,0.31758247400011896,0.07602495999981329,1.176e-05
+sin framework,E · router + evaluador,normal,s05,simple,SELECT nombre FROM productos WHERE stock < 10,simple,0,0.31805802100006986,True,True,False,2,360,18,378,196,0.3168232349999016,0.08253314800003864,1.188e-05
+sin framework,E · router + evaluador,normal,s06,simple,SELECT AVG(precio) FROM productos,compleja,0,0.6468354239996188,True,True,False,2,624,18,642,196,0.6460207999989507,0.1110298839994357,3.357e-05
+sin framework,E · router + evaluador,normal,s07,simple,SELECT COUNT(*) FROM clientes WHERE segmento = 'premium',simple,0,0.289558214999488,True,True,False,2,352,19,371,192,0.2888010690003284,0.0610399810002491,1.17e-05
+sin framework,E · router + evaluador,normal,s08,simple,"SELECT COUNT(*) FROM pedidos WHERE strftime('%m', fecha) = '03' AND strftime('%Y', fecha) = '2025'",simple,1,1.8915918800003055,True,True,False,3,659,71,730,530,1.890320777000852,1.4895487860003414,3.5039999999999997e-05
+sin framework,E · router + evaluador,normal,s09,simple,SELECT DISTINCT ciudad FROM clientes,simple,0,0.26108990800003085,True,True,False,2,360,13,373,196,0.260432776000016,0.08083273600004759,1.158e-05
+sin framework,E · router + evaluador,normal,s10,simple,SELECT COUNT(*) FROM categorias,simple,0,0.24179917099991144,True,True,False,2,352,14,366,192,0.2411828959984632,0.06792510199920798,1.14e-05
+sin framework,E · router + evaluador,normal,s11,simple,SELECT COUNT(*) FROM productos WHERE precio > 500000,simple,0,0.37172869099958916,True,True,False,2,368,23,391,200,0.37109418700038077,0.08112704500035761,1.242e-05
+sin framework,E · router + evaluador,normal,s12,simple,"SELECT COUNT(*) FROM clientes WHERE strftime('%Y', fecha_registro) = '2025'",simple,1,1.3491412220000711,True,True,False,3,642,50,692,503,1.3479366080000545,1.0552167599998938,3.222e-05
+sin framework,E · router + evaluador,normal,c01,compleja,SELECT COUNT(*) FROM productos WHERE categoria_id IN (SELECT id FROM categorias WHERE nombre = 'Electrónica'),compleja,0,1.041306920000352,True,True,False,2,626,33,659,197,1.0406553049997456,0.09868901499976346,3.546e-05
+sin framework,E · router + evaluador,normal,c02,compleja,"SELECT SUM(d.cantidad * d.precio_unitario) AS total_vendido
+FROM detalle_pedido d
+JOIN pedidos p ON p.id = d.pedido_id
+WHERE p.estado = 'entregado'",compleja,0,1.7579546110000592,True,True,False,2,646,58,704,210,1.757113587999811,0.153979912000068,3.918e-05
+sin framework,E · router + evaluador,normal,c03,compleja,"SELECT c.nombre FROM clientes c
+JOIN pedidos p ON p.cliente_id = c.id
+JOIN detalle_pedido dp ON dp.pedido_id = p.id
+WHERE p.estado = 'entregado'
+GROUP BY c.id
+ORDER BY SUM(dp.cantidad * dp.precio_unitario) DESC
+LIMIT 3",compleja,0,2.326582710000366,True,True,False,2,648,76,724,208,2.325390108000647,0.12139329700039525,4.1609999999999996e-05
+sin framework,E · router + evaluador,normal,c04,compleja,"SELECT c.ciudad, COUNT(*) AS num_pedidos FROM clientes c JOIN pedidos p ON p.cliente_id = c.id WHERE p.estado IN ('entregado', 'pendiente', 'cancelado') GROUP BY c.ciudad ORDER BY num_pedidos DESC LIMIT 1",compleja,0,2.0626757319996614,True,True,False,2,622,68,690,195,2.0617594900004406,0.11719907699989562,3.9479999999999995e-05
+sin framework,E · router + evaluador,normal,c05,compleja,"SELECT c.nombre, SUM(d.cantidad * d.precio_unitario) AS total
+FROM detalle_pedido d
+JOIN productos p ON p.id = d.producto_id
+JOIN pedidos pe ON pe.id = d.pedido_id
+JOIN categorias c ON c.id = p.categoria_id
+WHERE pe.estado = 'entregado'
+GROUP BY c.nombre",compleja,0,2.6230828369998562,True,True,False,2,652,90,742,215,2.6221177760007777,0.17775465300019277,4.317e-05
+sin framework,E · router + evaluador,normal,c06,compleja,"SELECT pr.nombre FROM detalle_pedido d JOIN productos pr ON pr.id = d.producto_id
+GROUP BY pr.id ORDER BY SUM(d.cantidad) DESC LIMIT 1",compleja,0,1.4211176809994868,True,True,False,2,638,45,683,203,1.420124544999453,0.10644268599935458,3.744e-05
+sin framework,E · router + evaluador,normal,c07,compleja,"SELECT c.nombre FROM clientes c
+WHERE c.id NOT IN (
+    SELECT p.cliente_id FROM pedidos p
+)",simple,0,0.46115875800023787,True,True,False,2,356,32,388,194,0.4604572079997524,0.07555389699973603,1.26e-05
+sin framework,E · router + evaluador,normal,c08,compleja,SELECT AVG(d.cantidad * d.precio_unitario) AS promedio FROM detalle_pedido d JOIN pedidos p ON p.id = d.pedido_id WHERE p.estado = 'entregado',compleja,1,3.26862380700004,True,False,False,3,952,98,1050,562,3.267461585000092,1.7984405959996366,6.254999999999999e-05
+sin framework,E · router + evaluador,normal,c09,compleja,"SELECT COUNT(c.id) FROM clientes c
+JOIN pedidos p ON p.cliente_id = c.id
+WHERE c.segmento = 'premium' AND c.ciudad = 'Bogotá' AND p.estado = 'cancelado'",compleja,0,1.8576012100002117,True,True,False,2,636,59,695,202,1.8568557989992769,0.10493985599987354,3.903e-05
+sin framework,E · router + evaluador,normal,c10,compleja,SELECT nombre FROM productos WHERE id NOT IN (SELECT producto_id FROM detalle_pedido),simple,0,0.35826072299914813,True,True,False,2,356,23,379,194,0.35719229799997265,0.07990072600023268,1.206e-05
+sin framework,E · router + evaluador,normal,c11,compleja,"SELECT c.segmento, COUNT(*) AS cantidad FROM clientes c
+JOIN pedidos p ON p.cliente_id = c.id
+WHERE p.estado IN ('entregado', 'pendiente', 'cancelado')
+GROUP BY c.segmento",compleja,0,1.834880905999853,True,True,False,2,642,59,701,205,1.831747565999649,0.13091464799981622,3.93e-05
+sin framework,E · router + evaluador,normal,c12,compleja,"SELECT c.nombre FROM clientes c JOIN pedidos p ON c.id = p.cliente_id
+JOIN detalle_pedido dp ON p.id = dp.pedido_id
+GROUP BY c.id
+ORDER BY SUM(dp.cantidad * dp.precio_unitario) DESC
+LIMIT 1",compleja,0,2.093406705000234,True,False,False,2,634,66,700,201,2.092292813000313,0.11841851600001974,3.9779999999999995e-05
+sin framework,E · router + evaluador,ruido,r01,simple,SELECT COUNT(*) FROM clientes WHERE ciudad = 'Medellín',simple,0,0.30557272900023236,True,True,False,2,350,20,370,191,0.30493536199992377,0.059586469999885594,1.17e-05
+sin framework,E · router + evaluador,ruido,r02,simple,SELECT COUNT(*) FROM pedidos WHERE estado = 'cancelado',simple,0,0.31861572100024205,True,True,False,2,346,21,367,190,0.3178073819999554,0.07556116799969459,1.1639999999999999e-05
+sin framework,E · router + evaluador,ruido,r03,simple,"SELECT p.nombre FROM productos p
+JOIN detalle_pedido dp ON p.id = dp.producto_id
+JOIN pedidos pe ON dp.pedido_id = pe.id
+WHERE pe.estado IN ('entregado', 'pendiente', 'cancelado')
+AND p.segmento IN ('normal', 'premium')
+AND pe.fecha BETWEEN 'YYYY-MM-DD' AND 'YYYY-MM-DD'
+ORDER BY dp.cantidad DESC
+LIMIT 1",simple,2,7.106230188000154,False,False,False,4,1058,278,1336,1080,7.1040580689996204,6.047101104999456,8.052e-05
+sin framework,E · router + evaluador,ruido,r04,simple,SELECT COUNT(*) FROM clientes WHERE segmento = 'premium',simple,0,0.322054152000419,True,True,False,2,348,19,367,190,0.32126879099996586,0.07939725399955933,1.1580000000000001e-05
+sin framework,E · router + evaluador,ruido,r05,simple,"SELECT COUNT(*) 
+FROM pedidos 
+WHERE strftime('%m', fecha) = '03' AND strftime('%Y', fecha) = '2025'",simple,1,2.0950139030001083,True,True,False,3,665,75,740,537,2.0936934219998875,1.6653138960000433,3.57e-05
+sin framework,E · router + evaluador,ruido,r06,simple,SELECT COUNT(*) FROM productos WHERE precio > 500000,simple,0,0.37032362100035243,True,True,False,2,356,23,379,194,0.3694758230003572,0.07904504799989809,1.206e-05
+sin framework,E · router + evaluador,ruido,r07,compleja,SELECT COUNT(*) FROM productos WHERE categoria_id IN (SELECT id FROM categorias WHERE nombre = 'Electrónica'),compleja,0,1.0004611200001818,True,True,False,2,616,33,649,192,0.9996739439993689,0.09759408299942152,3.501e-05
+sin framework,E · router + evaluador,ruido,r08,compleja,"SELECT c.ciudad, COUNT(*) AS total_pedidos FROM pedidos p JOIN clientes c ON c.id = p.cliente_id WHERE p.estado IN ('entregado', 'pendiente', 'cancelado') GROUP BY c.ciudad ORDER BY total_pedidos DESC LIMIT 1",compleja,0,2.1230763849998766,True,True,False,2,612,68,680,190,2.1222185999995418,0.09966458700000658,3.903e-05
+sin framework,E · router + evaluador,ruido,r09,compleja,"SELECT pr.nombre, SUM(d.cantidad) AS total_vendido
+FROM detalle_pedido d
+JOIN productos pr ON pr.id = d.producto_id
+GROUP BY pr.id
+ORDER BY total_vendido DESC
+LIMIT 1",compleja,0,1.7611040100000537,True,True,False,2,614,59,673,191,1.760023431999798,0.09711386100025265,3.8039999999999995e-05
+sin framework,E · router + evaluador,ruido,r10,compleja,"SELECT id, nombre, ciudad, segmento, fecha_registro
+FROM clientes
+WHERE id NOT IN (
+    SELECT cliente_id
+    FROM detalle_pedido
+)",simple,2,2.941073714000595,False,False,False,4,928,113,1041,845,2.939552369998637,2.491535025998928,5.6519999999999994e-05
+sin framework,E · router + evaluador,ruido,r11,compleja,"SELECT p.*
+FROM productos p
+WHERE p.id NOT IN (
+    SELECT dp.producto_id
+    FROM detalle_pedido dp
+    WHERE dp.pedido_id IN (
+        SELECT p.id
+        FROM pedidos p
+        WHERE p.estado IN ('entregado', 'pendiente', 'cancelado')
+    )
+)",simple,0,0.881566969999767,True,True,False,2,350,73,423,191,0.880580258000009,0.06417670199971326,1.488e-05
+sin framework,E · router + evaluador,ruido,r12,compleja,"SELECT c.segmento, COUNT(*) AS cantidad_pedidos FROM clientes c
+JOIN pedidos p ON p.cliente_id = c.id
+WHERE p.estado IN ('entregado', 'pendiente', 'cancelado')
+GROUP BY c.segmento",compleja,0,1.7790416170000753,True,True,False,2,614,61,675,191,1.7781225109993102,0.09602043599988974,3.828e-05
+LangGraph,A · único 1.5b,normal,s01,simple,SELECT COUNT(*) FROM clientes,,0,0.18916776300011406,True,True,False,1,228,11,239,0,0.18162243599999783,0.0,7.5e-06
+LangGraph,A · único 1.5b,normal,s02,simple,SELECT COUNT(*) FROM clientes WHERE ciudad = 'Medellín',,0,0.2399999029994433,True,True,False,1,231,18,249,0,0.23824263700043957,0.0,8.01e-06
+LangGraph,A · único 1.5b,normal,s03,simple,"SELECT p.nombre FROM productos p
+JOIN detalle_pedido dp ON p.id = dp.producto_id
+WHERE dp.precio_unitario = (SELECT MAX(precio_unitario) FROM detalle_pedido)",,0,0.5280413179998504,True,False,False,1,231,44,275,0,0.5262915950006573,0.0,9.57e-06
+LangGraph,A · único 1.5b,normal,s04,simple,SELECT COUNT(*) FROM pedidos WHERE estado = 'cancelado',,0,0.23953113399966242,True,True,False,1,229,18,247,0,0.23802676099967357,0.0,7.95e-06
+LangGraph,A · único 1.5b,normal,s05,simple,SELECT nombre FROM productos WHERE stock < 10,,0,0.23519708799994987,True,True,False,1,234,16,250,0,0.23362559899942426,0.0,7.98e-06
+LangGraph,A · único 1.5b,normal,s06,simple,"SELECT AVG(precio) AS precio_promedio
+FROM productos",,0,0.25713005700072245,True,True,False,1,231,18,249,0,0.2555068150004445,0.0,8.01e-06
+LangGraph,A · único 1.5b,normal,s07,simple,SELECT COUNT(*) FROM clientes WHERE segmento = 'premium',,0,0.22789718299918604,True,True,False,1,230,17,247,0,0.22641718599970773,0.0,7.92e-06
+LangGraph,A · único 1.5b,normal,s08,simple,SELECT COUNT(*) FROM pedidos WHERE MONTH(fecha) = 3 AND YEAR(fecha) = 2025,,0,0.39848280899968813,False,False,False,1,237,31,268,0,0.3968909260001965,0.0,8.969999999999999e-06
+LangGraph,A · único 1.5b,normal,s09,simple,SELECT DISTINCT ciudad FROM clientes,,0,0.18274652699983562,True,True,False,1,234,11,245,0,0.18032724000022426,0.0,7.68e-06
+LangGraph,A · único 1.5b,normal,s10,simple,SELECT COUNT(*) FROM categorias,,0,0.17643312500058528,True,True,False,1,230,12,242,0,0.17393847800030926,0.0,7.619999999999999e-06
+LangGraph,A · único 1.5b,normal,s11,simple,SELECT COUNT(*) FROM productos WHERE precio > 500000,,0,0.29220889400039596,True,True,False,1,238,21,259,0,0.2901615780001521,0.0,8.400000000000001e-06
+LangGraph,A · único 1.5b,normal,s12,simple,SELECT COUNT(*) FROM clientes WHERE YEAR(fecha_registro) = 2025,,0,0.2943380619999516,False,False,False,1,234,23,257,0,0.29210455100019317,0.0,8.4e-06
+LangGraph,A · único 1.5b,normal,c01,compleja,SELECT COUNT(*) FROM productos WHERE categoria_id IN (SELECT id FROM categorias WHERE nombre LIKE 'Electrónica'),,0,0.34997895899959985,True,True,False,1,232,28,260,0,0.34850992600058817,0.0,8.64e-06
+LangGraph,A · único 1.5b,normal,c02,compleja,"SELECT SUM(precio_unitario * cantidad) AS total_vendido
+FROM detalle_pedido
+JOIN pedidos ON detalle_pedido.pedido_id = pedidos.id
+JOIN productos ON detalle_pedido.producto_id = productos.id
+WHERE pedidos.estado = 'entregado'",,0,0.7305789520005419,True,True,False,1,242,60,302,0,0.7289205810002386,0.0,1.086e-05
+LangGraph,A · único 1.5b,normal,c03,compleja,"SELECT c.nombre
+FROM clientes c
+JOIN pedidos p ON c.id = p.cliente_id
+JOIN detalle_pedido dp ON p.id = dp.pedido_id
+WHERE p.estado = 'entregado'
+GROUP BY c.id
+ORDER BY SUM(dp.cantidad * dp.precio_unitario) DESC
+LIMIT 3",,0,0.865405503999682,True,True,False,1,243,72,315,0,0.8626331010000285,0.0,1.1609999999999999e-05
+LangGraph,A · único 1.5b,normal,c04,compleja,"SELECT c.ciudad
+FROM clientes c
+JOIN pedidos p ON c.id = p.cliente_id
+WHERE p.estado IN ('entregado', 'pendiente', 'cancelado')
+GROUP BY c.ciudad
+ORDER BY COUNT(p.id) DESC
+LIMIT 1",,0,0.7205519099998128,True,True,False,1,230,62,292,0,0.717956693000815,0.0,1.062e-05
+LangGraph,A · único 1.5b,normal,c05,compleja,"SELECT c.nombre, SUM(p.precio * dp.cantidad) as total
+FROM categorias c
+JOIN productos p ON c.id = p.categoria_id
+JOIN detalle_pedido dp ON p.id = dp.producto_id
+JOIN pedidos pe ON dp.pedido_id = pe.id
+WHERE pe.estado = 'entregado'
+GROUP BY c.nombre",,0,0.9254206870000417,True,True,False,1,245,78,323,0,0.9238707779995821,0.0,1.203e-05
+LangGraph,A · único 1.5b,normal,c06,compleja,"SELECT p.nombre
+FROM productos p
+JOIN detalle_pedido dp ON p.id = dp.producto_id
+JOIN pedidos pe ON dp.pedido_id = pe.id
+WHERE pe.estado IN ('entregado', 'pendiente', 'cancelado')
+GROUP BY p.id
+ORDER BY SUM(dp.cantidad) DESC
+LIMIT 1",,0,0.8628608030003306,True,True,False,1,238,74,312,0,0.8614847979997649,0.0,1.1579999999999998e-05
+LangGraph,A · único 1.5b,normal,c07,compleja,"SELECT c.nombre FROM clientes c
+WHERE c.id NOT IN (
+    SELECT p.cliente_id FROM pedidos p
+)",,0,0.3840246540003136,True,True,False,1,232,30,262,0,0.38266939200002525,0.0,8.759999999999999e-06
+LangGraph,A · único 1.5b,normal,c08,compleja,"SELECT AVG(precio_unitario * cantidad) AS promedio_pedido_entregado
+FROM detalle_pedido
+JOIN pedidos ON detalle_pedido.pedido_id = pedidos.id
+WHERE pedidos.estado = 'entregado'",,0,0.6053002399994512,True,False,False,1,239,50,289,0,0.6039379939993523,0.0,1.017e-05
+LangGraph,A · único 1.5b,normal,c09,compleja,"SELECT COUNT(DISTINCT c.id) 
+FROM clientes c 
+JOIN pedidos p ON c.id = p.cliente_id 
+JOIN detalle_pedido dp ON p.id = dp.pedido_id 
+JOIN productos pr ON dp.producto_id = pr.id 
+WHERE c.segmento = 'premium' 
+  AND c.ciudad LIKE 'Bogotá' 
+  AND p.estado = 'cancelado'",,0,1.0044230339999558,True,True,False,1,237,87,324,0,1.0026222570004393,0.0,1.2329999999999999e-05
+LangGraph,A · único 1.5b,normal,c10,compleja,"SELECT p.nombre FROM productos p
+WHERE p.id NOT IN (
+    SELECT dp.producto_id FROM detalle_pedido dp
+    JOIN pedidos p ON dp.pedido_id = p.id
+    WHERE p.estado IN ('entregado', 'pendiente', 'cancelado')
+)",,0,0.739170051999281,True,True,False,1,232,62,294,0,0.737044165000043,0.0,1.068e-05
+LangGraph,A · único 1.5b,normal,c11,compleja,"SELECT T2.segmento, COUNT(*) AS cantidad
+FROM pedidos AS T1
+JOIN clientes AS T2 ON T1.cliente_id = T2.id
+WHERE T1.estado IN ('entregado', 'pendiente', 'cancelado')
+GROUP BY T2.segmento",,0,0.7696406539998861,True,True,False,1,240,64,304,0,0.7682217669998863,0.0,1.104e-05
+LangGraph,A · único 1.5b,normal,c12,compleja,"SELECT c.nombre
+FROM clientes c
+JOIN pedidos p ON c.id = p.cliente_id
+JOIN detalle_pedido dp ON p.id = dp.pedido_id
+WHERE p.estado IN ('entregado', 'pendiente', 'cancelado')
+  AND c.segmento IN ('normal', 'premium')
+  AND c.ciudad LIKE 'Bogotá'
+  AND c.ciudad LIKE 'Medellín'
+  AND c.categorias.nombre LIKE 'Electrónica'
+  AND dp.precio_unitario * dp.cantidad > (
+    SELECT MAX(precio_unitario * cantidad)
+    FROM detalle_pedido
+    WHERE p.estado IN ('entregado', 'pendiente', 'cancelado')
+      AND c.segmento IN ('normal', 'premium')
+      AND c.ciudad LIKE 'Bogotá'
+      AND c.ciudad LIKE 'Medellín'
+      AND c.categorias.nombre LIKE 'Electrónica'
+  )",,0,2.212581324999519,False,False,False,1,236,198,434,0,2.2111062150006546,0.0,1.896e-05
+LangGraph,A · único 1.5b,ruido,r01,simple,SELECT COUNT(*) FROM clientes WHERE ciudad = 'Medellín',,0,0.24489487300070323,True,True,False,1,229,18,247,0,0.24336193499948422,0.0,7.95e-06
+LangGraph,A · único 1.5b,ruido,r02,simple,SELECT COUNT(*) FROM pedidos WHERE estado = 'cancelado',,0,0.24025429599987547,True,True,False,1,227,18,245,0,0.23844814099993528,0.0,7.889999999999999e-06
+LangGraph,A · único 1.5b,ruido,r03,simple,"SELECT p.nombre
+FROM productos p
+JOIN detalle_pedido dp ON p.id = dp.producto_id
+JOIN pedidos pe ON dp.pedido_id = pe.id
+WHERE pe.estado IN ('entregado', 'pendiente', 'cancelado')
+  AND p.categoria_id IN (SELECT id FROM categorias WHERE nombre IN ('Electrónica'))
+  AND pe.fecha BETWEEN '2023-01-01' AND '2023-12-31'
+  AND p.precio * dp.cantidad > 1000000
+ORDER BY dp.cantidad DESC
+LIMIT 1",,0,1.5489025739998397,True,False,False,1,232,137,369,0,1.546703494999747,0.0,1.518e-05
+LangGraph,A · único 1.5b,ruido,r04,simple,SELECT COUNT(*) FROM clientes WHERE segmento = 'premium',,0,0.22656681500029663,True,True,False,1,228,17,245,0,0.22518633999970916,0.0,7.86e-06
+LangGraph,A · único 1.5b,ruido,r05,simple,"SELECT COUNT(*) 
+FROM pedidos 
+WHERE MONTH(fecha) = 3 AND YEAR(fecha) = 2025",,0,0.4212786469997809,False,False,False,1,238,33,271,0,0.4197338359999776,0.0,9.119999999999999e-06
+LangGraph,A · único 1.5b,ruido,r06,simple,"SELECT COUNT(*) 
+FROM productos 
+WHERE precio > 500000",,0,0.31125055800021073,True,True,False,1,232,23,255,0,0.3095875070002876,0.0,8.34e-06
+LangGraph,A · único 1.5b,ruido,r07,compleja,SELECT COUNT(*) FROM productos WHERE categoria_id IN (SELECT id FROM categorias WHERE nombre LIKE 'Electrónica'),,0,0.34430715599955874,True,True,False,1,227,28,255,0,0.3421784070005742,0.0,8.49e-06
+LangGraph,A · único 1.5b,ruido,r08,compleja,"SELECT c.ciudad
+FROM clientes c
+JOIN pedidos p ON c.id = p.cliente_id
+WHERE p.estado IN ('entregado', 'pendiente', 'cancelado')
+GROUP BY c.ciudad
+ORDER BY COUNT(p.id) DESC
+LIMIT 1",,0,0.7165825129995937,True,True,False,1,225,62,287,0,0.7149300080000103,0.0,1.047e-05
+LangGraph,A · único 1.5b,ruido,r09,compleja,"SELECT p.nombre, SUM(dp.cantidad) AS total_vendido
+FROM productos p
+JOIN detalle_pedido dp ON p.id = dp.producto_id
+JOIN pedidos pe ON dp.pedido_id = pe.id
+WHERE pe.estado IN ('entregado', 'pendiente', 'cancelado')
+  AND p.categoria_id IN (SELECT id FROM categorias WHERE nombre LIKE 'Electrónica')
+  AND pe.fecha BETWEEN '2023-01-01' AND '2023-12-31'
+GROUP BY p.nombre
+ORDER BY total_vendido DESC
+LIMIT 1",,0,1.5048211599996648,True,False,False,1,226,135,361,0,1.5025639719997343,0.0,1.488e-05
+LangGraph,A · único 1.5b,ruido,r10,compleja,"SELECT c.*
+FROM clientes c
+WHERE c.id NOT IN (
+    SELECT p.cliente_id
+    FROM productos p
+    JOIN detalle_pedido dp ON p.id = dp.producto_id
+)",,0,0.5341718350000519,False,False,False,1,227,45,272,0,0.5313668150001831,0.0,9.51e-06
+LangGraph,A · único 1.5b,ruido,r11,compleja,"SELECT p.*
+FROM productos p
+WHERE p.id NOT IN (
+    SELECT dp.producto_id
+    FROM detalle_pedido dp
+    WHERE dp.pedido_id IN (
+        SELECT p.id
+        FROM pedidos p
+        WHERE p.estado IN ('entregado', 'pendiente', 'cancelado')
+    )
+)",,0,0.8187834889995429,True,True,False,1,229,71,300,0,0.8164762260003045,0.0,1.1129999999999998e-05
+LangGraph,A · único 1.5b,ruido,r12,compleja,"SELECT p.cliente_id, c.nombre, p.segmento, p.fecha
+FROM pedidos p
+JOIN clientes c ON p.cliente_id = c.id
+WHERE p.segmento IN ('normal', 'premium')
+  AND c.ciudad IN ('Bogotá', 'Medellín')
+  AND p.fecha LIKE '2023-01-%'
+  AND p.precio_unitario > 0",,0,1.037135288999707,False,False,False,1,226,92,318,0,1.035349108000446,0.0,1.2299999999999999e-05
+LangGraph,B · único 3b,normal,s01,simple,SELECT COUNT(*) FROM clientes,,0,0.42894719900050404,True,True,False,1,228,11,239,0,0.4265857390000747,0.0,1.5e-05
+LangGraph,B · único 3b,normal,s02,simple,"SELECT COUNT(*) AS cantidad_clientes
+FROM clientes
+WHERE ciudad = 'Medellín'",,0,0.7773832989996663,True,True,False,1,231,24,255,0,0.7758954079999967,0.0,1.674e-05
+LangGraph,B · único 3b,normal,s03,simple,SELECT nombre FROM productos ORDER BY precio DESC LIMIT 1,,0,0.5765680639997299,True,True,False,1,231,17,248,0,0.5749708729999838,0.0,1.59e-05
+LangGraph,B · único 3b,normal,s04,simple,"SELECT COUNT(*) AS cantidad_cancelados
+FROM pedidos
+WHERE estado = 'cancelado'",,0,0.7688491720000457,True,True,False,1,229,24,253,0,0.7672838279995631,0.0,1.662e-05
+LangGraph,B · único 3b,normal,s05,simple,SELECT nombre FROM productos WHERE stock < 10,,0,0.5996064139999362,True,True,False,1,234,16,250,0,0.5980852789998607,0.0,1.596e-05
+LangGraph,B · único 3b,normal,s06,simple,"SELECT AVG(precio) AS precio_promedio
+FROM productos",,0,0.6627689070000997,True,True,False,1,231,18,249,0,0.6611270870007502,0.0,1.602e-05
+LangGraph,B · único 3b,normal,s07,simple,"SELECT COUNT(*) AS cantidad_premium
+FROM clientes
+WHERE segmento = 'premium'",,0,0.7378595279997171,True,True,False,1,230,23,253,0,0.7363049400000818,0.0,1.6559999999999997e-05
+LangGraph,B · único 3b,normal,s08,simple,"SELECT COUNT(*) AS cantidad_pedidos
+FROM pedidos
+WHERE fecha LIKE '2025-03-%'",,0,0.9925348140004644,True,True,False,1,237,30,267,0,0.9910573300003307,0.0,1.782e-05
+LangGraph,B · único 3b,normal,s09,simple,SELECT DISTINCT ciudad FROM clientes,,0,0.4601162299995849,True,True,False,1,234,11,245,0,0.4587359649995051,0.0,1.536e-05
+LangGraph,B · único 3b,normal,s10,simple,SELECT COUNT(DISTINCT nombre) FROM categorias,,0,0.551946594000583,True,True,False,1,230,16,246,0,0.5504885250002189,0.0,1.572e-05
+LangGraph,B · único 3b,normal,s11,simple,"SELECT COUNT(*) 
+FROM productos 
+WHERE precio > 500000",,0,0.8121874319995186,True,True,False,1,238,23,261,0,0.8104189209998367,0.0,1.704e-05
+LangGraph,B · único 3b,normal,s12,simple,"SELECT COUNT(*) AS cantidad_clientes
+FROM clientes
+WHERE fecha_registro LIKE '2025-%'",,0,0.8655307209992316,True,True,False,1,234,27,261,0,0.8640533069992671,0.0,1.7279999999999997e-05
+LangGraph,B · único 3b,normal,c01,compleja,"SELECT COUNT(*) 
+FROM productos 
+JOIN categorias ON productos.categoria_id = categorias.id 
+WHERE categorias.nombre = 'Electrónica'",,0,1.0922190979999868,True,True,False,1,232,35,267,0,1.0906826689997615,0.0,1.812e-05
+LangGraph,B · único 3b,normal,c02,compleja,"SELECT SUM(precio_unitario * cantidad) AS total_vendido
+FROM detalle_pedido dp
+JOIN pedidos p ON dp.pedido_id = p.id
+WHERE p.estado = 'entregado'",,0,1.5164830280000388,True,True,False,1,242,47,289,0,1.514959030000682,0.0,2.016e-05
+LangGraph,B · único 3b,normal,c03,compleja,"SELECT c.nombre
+FROM clientes c
+JOIN pedidos p ON c.id = p.cliente_id
+JOIN detalle_pedido dp ON p.id = dp.pedido_id
+WHERE p.estado = 'entregado'
+GROUP BY c.id
+ORDER BY SUM(dp.cantidad * dp.precio_unitario) DESC
+LIMIT 3",,0,2.213135673000579,True,True,False,1,243,72,315,0,2.208103078000022,0.0,2.3219999999999998e-05
+LangGraph,B · único 3b,normal,c04,compleja,"SELECT c.ciudad
+FROM clientes c
+JOIN pedidos p ON c.id = p.cliente_id
+WHERE p.estado IN ('entregado', 'pendiente', 'cancelado')
+GROUP BY c.ciudad
+ORDER BY COUNT(p.id) DESC
+LIMIT 1",,0,1.8446238090000406,True,True,False,1,230,62,292,0,1.8431450680000125,0.0,2.124e-05
+LangGraph,B · único 3b,normal,c05,compleja,"SELECT c.nombre, SUM(p.precio * dp.cantidad) AS total
+FROM categorias c
+JOIN productos p ON c.id = p.categoria_id
+JOIN detalle_pedido dp ON p.id = dp.producto_id
+JOIN pedidos pe ON dp.pedido_id = pe.id
+WHERE pe.estado = 'entregado'
+GROUP BY c.nombre",,0,2.37432553599956,True,True,False,1,245,78,323,0,2.372820603999571,0.0,2.406e-05
+LangGraph,B · único 3b,normal,c06,compleja,"SELECT p.nombre
+FROM productos p
+JOIN detalle_pedido dp ON p.id = dp.producto_id
+GROUP BY p.id
+ORDER BY SUM(dp.cantidad) DESC
+LIMIT 1",,0,1.37978802500038,True,True,False,1,238,44,282,0,1.378245240999604,0.0,1.956e-05
+LangGraph,B · único 3b,normal,c07,compleja,SELECT nombre FROM clientes WHERE id NOT IN (SELECT cliente_id FROM pedidos),,0,0.7521012360002715,True,True,False,1,232,21,253,0,0.750660837000396,0.0,1.6440000000000002e-05
+LangGraph,B · único 3b,normal,c08,compleja,"SELECT AVG(precio_unitario * cantidad) AS promedio_precio
+FROM detalle_pedido dp
+JOIN pedidos p ON dp.pedido_id = p.id
+WHERE p.estado = 'entregado'",,0,1.4785482469997078,True,False,False,1,239,47,286,0,1.4769233289998738,0.0,1.9980000000000002e-05
+LangGraph,B · único 3b,normal,c09,compleja,"SELECT COUNT(DISTINCT c.id) AS cantidad
+FROM clientes c
+JOIN pedidos p ON c.id = p.cliente_id
+WHERE c.segmento = 'premium' AND c.ciudad = 'Bogotá' AND p.estado = 'cancelado'",,0,1.9299360639997758,True,True,False,1,237,60,297,0,1.9209086390001175,0.0,2.1419999999999998e-05
+LangGraph,B · único 3b,normal,c10,compleja,"SELECT p.nombre
+FROM productos p
+LEFT JOIN detalle_pedido dp ON p.id = dp.producto_id
+WHERE dp.producto_id IS NULL",,0,1.202171306999844,True,True,False,1,232,35,267,0,1.192154445999222,0.0,1.812e-05
+LangGraph,B · único 3b,normal,c11,compleja,"SELECT segmento, COUNT(*) AS cantidad
+FROM clientes
+WHERE segmento IN ('normal', 'premium')
+GROUP BY segmento",,0,1.146310053999514,True,False,False,1,240,32,272,0,1.143830633000107,0.0,1.8239999999999998e-05
+LangGraph,B · único 3b,normal,c12,compleja,"SELECT c.nombre
+FROM clientes c
+JOIN pedidos p ON c.id = p.cliente_id
+JOIN detalle_pedido dp ON p.id = dp.pedido_id
+WHERE p.estado = 'entregado'
+GROUP BY c.id
+ORDER BY SUM(dp.cantidad * dp.precio_unitario) DESC
+LIMIT 1",,0,2.2984838459997263,True,False,False,1,236,72,308,0,2.287444374000188,0.0,2.2800000000000002e-05
+LangGraph,B · único 3b,ruido,r01,simple,"SELECT COUNT(*) AS cantidad_clientes
+FROM clientes
+WHERE ciudad = 'Medellín'",,0,0.7990323549993263,True,True,False,1,229,24,253,0,0.7974206369999592,0.0,1.662e-05
+LangGraph,B · único 3b,ruido,r02,simple,"SELECT COUNT(*) AS numero_pedidos_cancelados
+FROM pedidos
+WHERE estado = 'cancelado'",,0,0.850365633000365,True,True,False,1,227,26,253,0,0.8484408879994589,0.0,1.674e-05
+LangGraph,B · único 3b,ruido,r03,simple,"SELECT p.nombre, SUM(p.precio * dp.cantidad) AS total_costo
+FROM productos p
+JOIN detalle_pedido dp ON p.id = dp.producto_id
+WHERE p.categoria_id = (SELECT c.id FROM categorias c WHERE c.nombre = 'Electrónica')
+GROUP BY p.id
+ORDER BY total_costo DESC
+LIMIT 1",,0,2.365521137000542,True,True,False,1,232,79,311,0,2.363916123999843,0.0,2.34e-05
+LangGraph,B · único 3b,ruido,r04,simple,"SELECT COUNT(*) AS cantidad_premiun
+FROM clientes
+WHERE segmento = 'premium'",,0,0.7965936800001145,True,True,False,1,228,25,253,0,0.7949414530003196,0.0,1.668e-05
+LangGraph,B · único 3b,ruido,r05,simple,"SELECT COUNT(*) AS cantidad_pedidos
+FROM pedidos
+WHERE fecha LIKE '2025-03-%'
+  AND estado IN ('entregado', 'pendiente', 'cancelado')",,0,1.5000646550006422,True,True,False,1,238,47,285,0,1.4977706610006862,0.0,1.992e-05
+LangGraph,B · único 3b,ruido,r06,simple,"SELECT COUNT(*) 
+FROM productos 
+WHERE precio > 500000",,0,0.8066243859993847,True,True,False,1,232,23,255,0,0.8040047240001513,0.0,1.668e-05
+LangGraph,B · único 3b,ruido,r07,compleja,"SELECT COUNT(*) 
+FROM productos 
+JOIN categorias ON productos.categoria_id = categorias.id 
+WHERE categorias.nombre = 'Electrónica'",,0,1.0688880959996823,True,True,False,1,227,35,262,0,1.067468928999915,0.0,1.782e-05
+LangGraph,B · único 3b,ruido,r08,compleja,"SELECT c.ciudad, COUNT(p.id) AS cantidad_pedidos
+FROM clientes c
+JOIN pedidos p ON c.id = p.cliente_id
+WHERE c.segmento IN ('normal', 'premium')
+GROUP BY c.ciudad
+ORDER BY cantidad_pedidos DESC
+LIMIT 1",,0,1.8851487430001725,True,True,False,1,225,64,289,0,1.8836692330005462,0.0,2.118e-05
+LangGraph,B · único 3b,ruido,r09,compleja,"SELECT p.nombre, SUM(dp.cantidad) AS unidades_vendidas
+FROM productos p
+JOIN detalle_pedido dp ON p.id = dp.producto_id
+WHERE dp.precio_unitario > 0
+GROUP BY p.id
+ORDER BY unidades_vendidas DESC
+LIMIT 1",,0,1.8769270319999123,True,True,False,1,226,64,290,0,1.875433554000665,0.0,2.124e-05
+LangGraph,B · único 3b,ruido,r10,compleja,"SELECT id, nombre, ciudad, segmento, fecha_registro
+FROM clientes
+WHERE id NOT IN (SELECT cliente_id FROM pedidos)",,0,1.019889436000085,True,True,False,1,227,33,260,0,1.0183946309998646,0.0,1.7579999999999998e-05
+LangGraph,B · único 3b,ruido,r11,compleja,"SELECT p.id, p.nombre, p.categoria_id, p.precio, p.stock
+FROM productos p
+LEFT JOIN detalle_pedido dp ON p.id = dp.producto_id
+WHERE dp.producto_id IS NULL",,0,1.4920864870000514,True,True,False,1,229,50,279,0,1.490576735999639,0.0,1.974e-05
+LangGraph,B · único 3b,ruido,r12,compleja,"SELECT c.segmento, COUNT(p.id) AS cantidad_pedidos
+FROM clientes c
+JOIN pedidos p ON c.id = p.cliente_id
+WHERE c.segmento IN ('normal', 'premium')
+GROUP BY c.segmento",,0,1.587405031000344,True,True,False,1,226,53,279,0,1.5846985570005927,0.0,1.992e-05
+LangGraph,C · router,normal,s01,simple,SELECT COUNT(*) FROM clientes,simple,0,0.23781472600057896,True,True,False,2,348,13,361,190,0.2341066620001584,0.06787880000047153,1.1220000000000001e-05
+LangGraph,C · router,normal,s02,simple,SELECT COUNT(*) FROM clientes WHERE ciudad = 'Medellín',simple,0,0.31067367299965554,True,True,False,2,354,20,374,193,0.30833002100007434,0.06794235500001378,1.1819999999999999e-05
+LangGraph,C · router,normal,s03,simple,SELECT nombre FROM productos ORDER BY precio DESC LIMIT 1,simple,0,0.2982069309991857,True,True,False,2,354,19,373,193,0.2957010390000505,0.06568928799970308,1.176e-05
+LangGraph,C · router,normal,s04,simple,SELECT COUNT(*) FROM pedidos WHERE estado = 'cancelado',simple,0,0.3270998360003432,True,True,False,2,350,21,371,192,0.32400162299927615,0.07620411599964427,1.176e-05
+LangGraph,C · router,normal,s05,simple,SELECT nombre FROM productos WHERE stock < 10,simple,0,0.32211843599998247,True,True,False,2,360,18,378,196,0.31976354000016727,0.08420809500057658,1.188e-05
+LangGraph,C · router,normal,s06,simple,SELECT AVG(precio) FROM productos,compleja,0,0.6572461380001187,True,True,False,2,624,18,642,196,0.654199678000623,0.11019554900030926,3.357e-05
+LangGraph,C · router,normal,s07,simple,SELECT COUNT(*) FROM clientes WHERE segmento = 'premium',simple,0,0.3015611850005371,True,True,False,2,352,19,371,192,0.2991837999989002,0.060320058999423054,1.17e-05
+LangGraph,C · router,normal,s08,simple,SELECT COUNT(*) FROM pedidos WHERE MONTH(fecha) = 3 AND YEAR(fecha) = 2025,simple,0,0.49799636299940175,False,False,False,2,366,34,400,200,0.49581753600068623,0.0911582440003258,1.302e-05
+LangGraph,C · router,normal,s09,simple,SELECT DISTINCT ciudad FROM clientes,simple,0,0.2647073250000176,True,True,False,2,360,13,373,196,0.26236967899967567,0.0813777929997741,1.158e-05
+LangGraph,C · router,normal,s10,simple,SELECT COUNT(*) FROM categorias,simple,0,0.24457351700038998,True,True,False,2,352,14,366,192,0.24201566300052946,0.06570032400031778,1.14e-05
+LangGraph,C · router,normal,s11,simple,SELECT COUNT(*) FROM productos WHERE precio > 500000,simple,0,0.3779825809997419,True,True,False,2,368,23,391,200,0.37583476300005714,0.08312200000000303,1.242e-05
+LangGraph,C · router,normal,s12,simple,SELECT COUNT(*) FROM clientes WHERE YEAR(fecha_registro) = 2025,simple,0,0.36729433799973776,False,False,False,2,360,25,385,196,0.36500872499982506,0.06687923899971793,1.2299999999999999e-05
+LangGraph,C · router,normal,c01,compleja,SELECT COUNT(*) FROM productos WHERE categoria_id IN (SELECT id FROM categorias WHERE nombre = 'Electrónica'),compleja,0,1.0657251250004265,True,True,False,2,626,33,659,197,1.0628744970008484,0.09507199000017863,3.546e-05
+LangGraph,C · router,normal,c02,compleja,"SELECT SUM(d.cantidad * d.precio_unitario) AS total_vendido
+FROM detalle_pedido d
+JOIN pedidos p ON p.id = d.pedido_id
+WHERE p.estado = 'entregado'",compleja,0,1.750056864999351,True,True,False,2,646,58,704,210,1.7479132370008301,0.15513894900050218,3.918e-05
+LangGraph,C · router,normal,c03,compleja,"SELECT c.nombre FROM clientes c
+JOIN pedidos p ON p.cliente_id = c.id
+JOIN detalle_pedido dp ON dp.pedido_id = p.id
+WHERE p.estado = 'entregado'
+GROUP BY c.id
+ORDER BY SUM(dp.cantidad * dp.precio_unitario) DESC
+LIMIT 3",compleja,0,2.409234034000292,True,True,False,2,648,76,724,208,2.4070219629993517,0.12625239999943005,4.1609999999999996e-05
+LangGraph,C · router,normal,c04,compleja,"SELECT c.ciudad, COUNT(*) AS num_pedidos FROM clientes c JOIN pedidos p ON p.cliente_id = c.id WHERE p.estado IN ('entregado', 'pendiente', 'cancelado') GROUP BY c.ciudad ORDER BY num_pedidos DESC LIMIT 1",compleja,0,2.0929263130001345,True,True,False,2,622,68,690,195,2.0906419560005816,0.10046001200043975,3.9479999999999995e-05
+LangGraph,C · router,normal,c05,compleja,"SELECT c.nombre, SUM(d.cantidad * d.precio_unitario) AS total
+FROM detalle_pedido d
+JOIN productos p ON p.id = d.producto_id
+JOIN pedidos pe ON pe.id = d.pedido_id
+JOIN categorias c ON c.id = p.categoria_id
+WHERE pe.estado = 'entregado'
+GROUP BY c.nombre",compleja,0,2.6515418139997564,True,True,False,2,652,90,742,215,2.649388478000219,0.18291077800040512,4.317e-05
+LangGraph,C · router,normal,c06,compleja,"SELECT pr.nombre FROM detalle_pedido d JOIN productos pr ON pr.id = d.producto_id
+GROUP BY pr.id ORDER BY SUM(d.cantidad) DESC LIMIT 1",compleja,0,1.4518483519996153,True,True,False,2,638,45,683,203,1.4494186570000238,0.11001669800043601,3.744e-05
+LangGraph,C · router,normal,c07,compleja,"SELECT c.nombre FROM clientes c
+WHERE c.id NOT IN (
+    SELECT p.cliente_id FROM pedidos p
+)",simple,0,0.47473317599997245,True,True,False,2,356,32,388,194,0.46534669599986955,0.07847353699980886,1.26e-05
+LangGraph,C · router,normal,c08,compleja,SELECT AVG(SUM(d.cantidad * d.precio_unitario)) AS promedio FROM detalle_pedido d JOIN pedidos p ON p.id = d.pedido_id WHERE p.estado = 'entregado',compleja,0,1.6259812770003919,False,False,False,2,640,53,693,205,1.6222727949998443,0.12531151300026977,3.8429999999999996e-05
+LangGraph,C · router,normal,c09,compleja,"SELECT COUNT(c.id) FROM clientes c
+JOIN pedidos p ON p.cliente_id = c.id
+WHERE c.segmento = 'premium' AND c.ciudad = 'Bogotá' AND p.estado = 'cancelado'",compleja,0,1.8114111120003145,True,True,False,2,636,59,695,202,1.8086586110002827,0.11743569200007187,3.903e-05
+LangGraph,C · router,normal,c10,compleja,SELECT nombre FROM productos WHERE id NOT IN (SELECT producto_id FROM detalle_pedido),simple,0,0.356319165000059,True,True,False,2,356,23,379,194,0.35391035200063925,0.0793522080002731,1.206e-05
+LangGraph,C · router,normal,c11,compleja,"SELECT c.segmento, COUNT(*) AS cantidad FROM clientes c
+JOIN pedidos p ON p.cliente_id = c.id
+WHERE p.estado IN ('entregado', 'pendiente', 'cancelado')
+GROUP BY c.segmento",compleja,0,1.8118618279995644,True,True,False,2,642,59,701,205,1.809353072999329,0.12655971299955127,3.93e-05
+LangGraph,C · router,normal,c12,compleja,"SELECT c.nombre FROM clientes c JOIN pedidos p ON c.id = p.cliente_id
+JOIN detalle_pedido dp ON p.id = dp.pedido_id
+GROUP BY c.id
+ORDER BY SUM(dp.cantidad * dp.precio_unitario) DESC
+LIMIT 1",compleja,0,2.0283576169995285,True,False,False,2,634,66,700,201,2.0255424679999123,0.1078093819996866,3.9779999999999995e-05
+LangGraph,C · router,ruido,r01,simple,SELECT COUNT(*) FROM clientes WHERE ciudad = 'Medellín',simple,0,0.30800797499978216,True,True,False,2,350,20,370,191,0.30566369500047585,0.06379731000015454,1.17e-05
+LangGraph,C · router,ruido,r02,simple,SELECT COUNT(*) FROM pedidos WHERE estado = 'cancelado',simple,0,0.3214079370000036,True,True,False,2,346,21,367,190,0.31920522400014306,0.07612723700003698,1.1639999999999999e-05
+LangGraph,C · router,ruido,r03,simple,"SELECT p.nombre FROM productos p
+JOIN detalle_pedido dp ON p.id = dp.producto_id
+JOIN pedidos pe ON dp.pedido_id = pe.id
+WHERE pe.estado IN ('entregado', 'pendiente', 'cancelado')
+AND p.segmento IN ('normal', 'premium')
+AND pe.fecha BETWEEN 'YYYY-MM-DD' AND 'YYYY-MM-DD'
+ORDER BY dp.cantidad DESC
+LIMIT 1",simple,0,1.1468528039995363,False,False,False,2,356,94,450,194,1.1446149610010252,0.0826466780008559,1.632e-05
+LangGraph,C · router,ruido,r04,simple,SELECT COUNT(*) FROM clientes WHERE segmento = 'premium',simple,0,0.3032644539998728,True,True,False,2,348,19,367,190,0.3002758209995591,0.06734264599981543,1.1580000000000001e-05
+LangGraph,C · router,ruido,r05,simple,"SELECT COUNT(*) 
+FROM pedidos 
+WHERE MONTH(fecha) = 3 AND YEAR(fecha) = 2025",simple,0,0.518802562000019,False,False,False,2,368,36,404,201,0.5161307270009274,0.09265600000071572,1.3199999999999999e-05
+LangGraph,C · router,ruido,r06,simple,SELECT COUNT(*) FROM productos WHERE precio > 500000,simple,0,0.37609219900059543,True,True,False,2,356,23,379,194,0.3731152989994371,0.0833077229999617,1.206e-05
+LangGraph,C · router,ruido,r07,compleja,SELECT COUNT(*) FROM productos WHERE categoria_id IN (SELECT id FROM categorias WHERE nombre = 'Electrónica'),compleja,0,1.0063840749999144,True,True,False,2,616,33,649,192,1.0040803020001476,0.09527049600001192,3.501e-05
+LangGraph,C · router,ruido,r08,compleja,"SELECT c.ciudad, COUNT(*) AS total_pedidos FROM pedidos p JOIN clientes c ON c.id = p.cliente_id WHERE p.estado IN ('entregado', 'pendiente', 'cancelado') GROUP BY c.ciudad ORDER BY total_pedidos DESC LIMIT 1",compleja,0,2.1080728249999083,True,True,False,2,612,68,680,190,2.105267386000378,0.1045321720002903,3.903e-05
+LangGraph,C · router,ruido,r09,compleja,"SELECT pr.nombre, SUM(d.cantidad) AS total_vendido
+FROM detalle_pedido d
+JOIN productos pr ON pr.id = d.producto_id
+GROUP BY pr.id
+ORDER BY total_vendido DESC
+LIMIT 1",compleja,0,1.7472716199999923,True,True,False,2,614,59,673,191,1.7450110090003363,0.10265017100027762,3.8039999999999995e-05
+LangGraph,C · router,ruido,r10,compleja,"SELECT id, nombre, ciudad, segmento, fecha_registro
+FROM clientes
+WHERE id NOT IN (
+    SELECT cliente_id
+    FROM detalle_pedido
+)",simple,0,0.5126795619999029,False,False,False,2,346,39,385,189,0.5104466769998908,0.06057185000008758,1.2719999999999998e-05
+LangGraph,C · router,ruido,r11,compleja,"SELECT p.*
+FROM productos p
+WHERE p.id NOT IN (
+    SELECT dp.producto_id
+    FROM detalle_pedido dp
+    WHERE dp.pedido_id IN (
+        SELECT p.id
+        FROM pedidos p
+        WHERE p.estado IN ('entregado', 'pendiente', 'cancelado')
+    )
+)",simple,0,0.8853860350000105,True,True,False,2,350,73,423,191,0.8832391939995432,0.0651198919995295,1.488e-05
+LangGraph,C · router,ruido,r12,compleja,"SELECT c.segmento, COUNT(*) AS cantidad_pedidos FROM clientes c
+JOIN pedidos p ON p.cliente_id = c.id
+WHERE p.estado IN ('entregado', 'pendiente', 'cancelado')
+GROUP BY c.segmento",compleja,0,1.7972156129999348,True,True,False,2,614,61,675,191,1.7944851120000749,0.09722604699982185,3.828e-05
+LangGraph,E · router + evaluador,normal,s01,simple,SELECT COUNT(*) FROM clientes,simple,0,0.2541826630003925,True,True,False,2,348,13,361,190,0.24821181999959663,0.07987060499999643,1.1220000000000001e-05
+LangGraph,E · router + evaluador,normal,s02,simple,SELECT COUNT(*) FROM clientes WHERE ciudad = 'Medellín',simple,0,0.3128946709994125,True,True,False,2,354,20,374,193,0.3091619520000677,0.06766722500015021,1.1819999999999999e-05
+LangGraph,E · router + evaluador,normal,s03,simple,SELECT nombre FROM productos ORDER BY precio DESC LIMIT 1,simple,0,0.3067558619995907,True,True,False,2,354,19,373,193,0.30307656999957544,0.06949775700013561,1.176e-05
+LangGraph,E · router + evaluador,normal,s04,simple,SELECT COUNT(*) FROM pedidos WHERE estado = 'cancelado',simple,0,0.3206622450006762,True,True,False,2,350,21,371,192,0.3177454779997788,0.07433612899967557,1.176e-05
+LangGraph,E · router + evaluador,normal,s05,simple,SELECT nombre FROM productos WHERE stock < 10,simple,0,0.32155795600010606,True,True,False,2,360,18,378,196,0.3185719060002157,0.08110448600018572,1.188e-05
+LangGraph,E · router + evaluador,normal,s06,simple,SELECT AVG(precio) FROM productos,compleja,0,0.6697169369999756,True,True,False,2,624,18,642,196,0.6644693670004926,0.11404888300057792,3.357e-05
+LangGraph,E · router + evaluador,normal,s07,simple,SELECT COUNT(*) FROM clientes WHERE segmento = 'premium',simple,0,0.2960408669996468,True,True,False,2,352,19,371,192,0.29208709899921814,0.062372861999392626,1.17e-05
+LangGraph,E · router + evaluador,normal,s08,simple,"SELECT COUNT(*) FROM pedidos WHERE strftime('%m', fecha) = '03' AND strftime('%Y', fecha) = '2025'",simple,1,1.9102706370003943,True,True,False,3,659,71,730,530,1.9052987290006058,1.5013702770002055,3.5039999999999997e-05
+LangGraph,E · router + evaluador,normal,s09,simple,SELECT DISTINCT ciudad FROM clientes,simple,0,0.26967821500056743,True,True,False,2,360,13,373,196,0.2664965399999346,0.08338828700016165,1.158e-05
+LangGraph,E · router + evaluador,normal,s10,simple,SELECT COUNT(*) FROM categorias,simple,0,0.24706853199950274,True,True,False,2,352,14,366,192,0.24304890499934118,0.06652623499940091,1.14e-05
+LangGraph,E · router + evaluador,normal,s11,simple,SELECT COUNT(*) FROM productos WHERE precio > 500000,simple,0,0.37844873199992435,True,True,False,2,368,23,391,200,0.37535394100086705,0.08225560700066126,1.242e-05
+LangGraph,E · router + evaluador,normal,s12,simple,"SELECT COUNT(*) FROM clientes WHERE strftime('%Y', fecha_registro) = '2025'",simple,1,1.3509321800001999,True,True,False,3,642,50,692,503,1.346136480999121,1.049718536999535,3.222e-05
+LangGraph,E · router + evaluador,normal,c01,compleja,SELECT COUNT(*) FROM productos WHERE categoria_id IN (SELECT id FROM categorias WHERE nombre = 'Electrónica'),compleja,0,1.0495219430004,True,True,False,2,626,33,659,197,1.0460779449995243,0.10274072799984424,3.546e-05
+LangGraph,E · router + evaluador,normal,c02,compleja,"SELECT SUM(d.cantidad * d.precio_unitario) AS total_vendido
+FROM detalle_pedido d
+JOIN pedidos p ON p.id = d.pedido_id
+WHERE p.estado = 'entregado'",compleja,0,1.77796455600037,True,True,False,2,646,58,704,210,1.7748809370004892,0.15790419099994324,3.918e-05
+LangGraph,E · router + evaluador,normal,c03,compleja,"SELECT c.nombre FROM clientes c
+JOIN pedidos p ON p.cliente_id = c.id
+JOIN detalle_pedido dp ON dp.pedido_id = p.id
+WHERE p.estado = 'entregado'
+GROUP BY c.id
+ORDER BY SUM(dp.cantidad * dp.precio_unitario) DESC
+LIMIT 3",compleja,0,2.380182648999835,True,True,False,2,648,76,724,208,2.376669438001045,0.1217252490005194,4.1609999999999996e-05
+LangGraph,E · router + evaluador,normal,c04,compleja,"SELECT c.ciudad, COUNT(*) AS num_pedidos FROM clientes c JOIN pedidos p ON p.cliente_id = c.id WHERE p.estado IN ('entregado', 'pendiente', 'cancelado') GROUP BY c.ciudad ORDER BY num_pedidos DESC LIMIT 1",compleja,0,2.063573215999895,True,True,False,2,622,68,690,195,2.0602310479998778,0.096474811999542,3.9479999999999995e-05
+LangGraph,E · router + evaluador,normal,c05,compleja,"SELECT c.nombre, SUM(d.cantidad * d.precio_unitario) AS total
+FROM detalle_pedido d
+JOIN productos p ON p.id = d.producto_id
+JOIN pedidos pe ON pe.id = d.pedido_id
+JOIN categorias c ON c.id = p.categoria_id
+WHERE pe.estado = 'entregado'
+GROUP BY c.nombre",compleja,0,2.622539039000003,True,True,False,2,652,90,742,215,2.619240381000054,0.1807434510001258,4.317e-05
+LangGraph,E · router + evaluador,normal,c06,compleja,"SELECT pr.nombre FROM detalle_pedido d JOIN productos pr ON pr.id = d.producto_id
+GROUP BY pr.id ORDER BY SUM(d.cantidad) DESC LIMIT 1",compleja,0,1.482260820999727,True,True,False,2,638,45,683,203,1.4750854300000356,0.10878337600024679,3.744e-05
+LangGraph,E · router + evaluador,normal,c07,compleja,"SELECT c.nombre FROM clientes c
+WHERE c.id NOT IN (
+    SELECT p.cliente_id FROM pedidos p
+)",simple,0,0.4873212640004567,True,True,False,2,356,32,388,194,0.4818234529993788,0.0894801729991741,1.26e-05
+LangGraph,E · router + evaluador,normal,c08,compleja,SELECT AVG(d.cantidad * d.precio_unitario) AS promedio FROM detalle_pedido d JOIN pedidos p ON p.id = d.pedido_id WHERE p.estado = 'entregado',compleja,1,3.3935211580001123,True,False,False,3,952,98,1050,562,3.3881793029995606,1.814447188999111,6.254999999999999e-05
+LangGraph,E · router + evaluador,normal,c09,compleja,"SELECT COUNT(c.id) FROM clientes c
+JOIN pedidos p ON p.cliente_id = c.id
+WHERE c.segmento = 'premium' AND c.ciudad = 'Bogotá' AND p.estado = 'cancelado'",compleja,0,1.8694916730000841,True,True,False,2,636,59,695,202,1.8664173430006485,0.10969326900067244,3.903e-05
+LangGraph,E · router + evaluador,normal,c10,compleja,SELECT nombre FROM productos WHERE id NOT IN (SELECT producto_id FROM detalle_pedido),simple,0,0.3599954040000739,True,True,False,2,356,23,379,194,0.35640090000015334,0.07944507800038991,1.206e-05
+LangGraph,E · router + evaluador,normal,c11,compleja,"SELECT c.segmento, COUNT(*) AS cantidad FROM clientes c
+JOIN pedidos p ON p.cliente_id = c.id
+WHERE p.estado IN ('entregado', 'pendiente', 'cancelado')
+GROUP BY c.segmento",compleja,0,1.8715922399996998,True,True,False,2,642,59,701,205,1.8679480079999848,0.1269532779997462,3.93e-05
+LangGraph,E · router + evaluador,normal,c12,compleja,"SELECT c.nombre FROM clientes c JOIN pedidos p ON c.id = p.cliente_id
+JOIN detalle_pedido dp ON p.id = dp.pedido_id
+GROUP BY c.id
+ORDER BY SUM(dp.cantidad * dp.precio_unitario) DESC
+LIMIT 1",compleja,0,2.0714299749997735,True,False,False,2,634,66,700,201,2.0676337000004423,0.10594358100024692,3.9779999999999995e-05
+LangGraph,E · router + evaluador,ruido,r01,simple,SELECT COUNT(*) FROM clientes WHERE ciudad = 'Medellín',simple,0,0.3123378230002345,True,True,False,2,350,20,370,191,0.3081837519994224,0.061522420999608585,1.17e-05
+LangGraph,E · router + evaluador,ruido,r02,simple,SELECT COUNT(*) FROM pedidos WHERE estado = 'cancelado',simple,0,0.32226725300006365,True,True,False,2,346,21,367,190,0.31936291700003494,0.0753926280003725,1.1639999999999999e-05
+LangGraph,E · router + evaluador,ruido,r03,simple,"SELECT p.nombre FROM productos p
+JOIN detalle_pedido dp ON p.id = dp.producto_id
+JOIN pedidos pe ON dp.pedido_id = pe.id
+WHERE pe.estado IN ('entregado', 'pendiente', 'cancelado')
+AND p.segmento IN ('normal', 'premium')
+AND pe.fecha BETWEEN 'YYYY-MM-DD' AND 'YYYY-MM-DD'
+ORDER BY dp.cantidad DESC
+LIMIT 1",simple,2,6.9879908000002615,False,False,False,4,1058,278,1336,1080,6.982082184000319,5.9099052700003085,8.052e-05
+LangGraph,E · router + evaluador,ruido,r04,simple,SELECT COUNT(*) FROM clientes WHERE segmento = 'premium',simple,0,0.3000111880000986,True,True,False,2,348,19,367,190,0.2969177220002166,0.06390895999993518,1.1580000000000001e-05
+LangGraph,E · router + evaluador,ruido,r05,simple,"SELECT COUNT(*) 
+FROM pedidos 
+WHERE strftime('%m', fecha) = '03' AND strftime('%Y', fecha) = '2025'",simple,1,2.0505579350001426,True,True,False,3,665,75,740,537,2.0441361970006255,1.6163316030006172,3.57e-05
+LangGraph,E · router + evaluador,ruido,r06,simple,SELECT COUNT(*) FROM productos WHERE precio > 500000,simple,0,0.37892206400010764,True,True,False,2,356,23,379,194,0.3758700130001671,0.08423457000026247,1.206e-05
+LangGraph,E · router + evaluador,ruido,r07,compleja,SELECT COUNT(*) FROM productos WHERE categoria_id IN (SELECT id FROM categorias WHERE nombre = 'Electrónica'),compleja,0,1.0119255259996862,True,True,False,2,616,33,649,192,1.0082417650000934,0.09659970500069903,3.501e-05
+LangGraph,E · router + evaluador,ruido,r08,compleja,"SELECT c.ciudad, COUNT(*) AS total_pedidos FROM pedidos p JOIN clientes c ON c.id = p.cliente_id WHERE p.estado IN ('entregado', 'pendiente', 'cancelado') GROUP BY c.ciudad ORDER BY total_pedidos DESC LIMIT 1",compleja,0,2.010364570999627,True,True,False,2,612,68,680,190,2.007190649000222,0.09490173199992569,3.903e-05
+LangGraph,E · router + evaluador,ruido,r09,compleja,"SELECT pr.nombre, SUM(d.cantidad) AS total_vendido
+FROM detalle_pedido d
+JOIN productos pr ON pr.id = d.producto_id
+GROUP BY pr.id
+ORDER BY total_vendido DESC
+LIMIT 1",compleja,0,1.7918321840006683,True,True,False,2,614,59,673,191,1.7872787619999144,0.09293005200015614,3.8039999999999995e-05
+LangGraph,E · router + evaluador,ruido,r10,compleja,"SELECT id, nombre, ciudad, segmento, fecha_registro
+FROM clientes
+WHERE id NOT IN (
+    SELECT cliente_id
+    FROM detalle_pedido
+)",simple,2,2.960843058000137,False,False,False,4,928,113,1041,845,2.9536282059998484,2.5010075560003315,5.6519999999999994e-05
+LangGraph,E · router + evaluador,ruido,r11,compleja,"SELECT p.*
+FROM productos p
+WHERE p.id NOT IN (
+    SELECT dp.producto_id
+    FROM detalle_pedido dp
+    WHERE dp.pedido_id IN (
+        SELECT p.id
+        FROM pedidos p
+        WHERE p.estado IN ('entregado', 'pendiente', 'cancelado')
+    )
+)",simple,0,0.89327574500021,True,True,False,2,350,73,423,191,0.8901222849999613,0.06553954100036208,1.488e-05
+LangGraph,E · router + evaluador,ruido,r12,compleja,"SELECT c.segmento, COUNT(*) AS cantidad_pedidos FROM clientes c
+JOIN pedidos p ON p.cliente_id = c.id
+WHERE p.estado IN ('entregado', 'pendiente', 'cancelado')
+GROUP BY c.segmento",compleja,0,1.8001584150006238,True,True,False,2,614,61,675,191,1.7969097619998138,0.0954367189997356,3.828e-05
+sin framework,D · evaluador-optimizador,normal,s01,simple,SELECT COUNT(*) FROM clientes,,0,0.18897667600049317,True,True,False,1,228,11,239,0,0.18786187400019116,0.0,7.5e-06
+sin framework,D · evaluador-optimizador,normal,s02,simple,SELECT COUNT(*) FROM clientes WHERE ciudad = 'Medellín',,0,0.2244227970004431,True,True,False,1,231,18,249,0,0.2236764060007772,0.0,8.01e-06
+sin framework,D · evaluador-optimizador,normal,s03,simple,"SELECT p.nombre FROM productos p
+JOIN detalle_pedido dp ON p.id = dp.producto_id
+WHERE dp.precio_unitario = (SELECT MAX(precio_unitario) FROM detalle_pedido)",,0,0.501568495000356,True,False,False,1,231,44,275,0,0.5004555800005619,0.0,9.57e-06
+sin framework,D · evaluador-optimizador,normal,s04,simple,SELECT COUNT(*) FROM pedidos WHERE estado = 'cancelado',,0,0.22010892999969656,True,True,False,1,229,18,247,0,0.21926099000029353,0.0,7.95e-06
+sin framework,D · evaluador-optimizador,normal,s05,simple,SELECT nombre FROM productos WHERE stock < 10,,0,0.22307745200032514,True,True,False,1,234,16,250,0,0.22238972699960868,0.0,7.98e-06
+sin framework,D · evaluador-optimizador,normal,s06,simple,"SELECT AVG(precio) AS precio_promedio
+FROM productos",,0,0.24238003800019214,True,True,False,1,231,18,249,0,0.24157218700020167,0.0,8.01e-06
+sin framework,D · evaluador-optimizador,normal,s07,simple,SELECT COUNT(*) FROM clientes WHERE segmento = 'premium',,0,0.2167935090001265,True,True,False,1,230,17,247,0,0.21610746099941025,0.0,7.92e-06
+sin framework,D · evaluador-optimizador,normal,s08,simple,"SELECT COUNT(*) FROM pedidos WHERE strftime('%m', fecha) = '03' AND strftime('%Y', fecha) = '2025'",,1,1.7472387040006652,True,True,False,2,530,68,598,330,1.7459724170003028,1.3682040000003326,3.098999999999999e-05
+sin framework,D · evaluador-optimizador,normal,s09,simple,SELECT DISTINCT ciudad FROM clientes,,0,0.17034820100070647,True,True,False,1,234,11,245,0,0.16982732599990413,0.0,7.68e-06
+sin framework,D · evaluador-optimizador,normal,s10,simple,SELECT COUNT(*) FROM categorias,,0,0.16792667400022765,True,True,False,1,230,12,242,0,0.16742172200065397,0.0,7.619999999999999e-06
+sin framework,D · evaluador-optimizador,normal,s11,simple,SELECT COUNT(*) FROM productos WHERE precio > 500000,,0,0.2786261220007873,True,True,False,1,238,21,259,0,0.27810196499922313,0.0,8.400000000000001e-06
+sin framework,D · evaluador-optimizador,normal,s12,simple,"SELECT COUNT(*) FROM clientes WHERE strftime('%Y', fecha_registro) = '2025'",,1,1.2477280140001312,True,True,False,2,516,48,564,307,1.2467310349993568,0.9697731340002065,2.832e-05
+sin framework,D · evaluador-optimizador,normal,c01,compleja,SELECT COUNT(*) FROM productos WHERE categoria_id IN (SELECT id FROM categorias WHERE nombre LIKE 'Electrónica'),,0,0.33764798500033066,True,True,False,1,232,28,260,0,0.33712683100020513,0.0,8.64e-06
+sin framework,D · evaluador-optimizador,normal,c02,compleja,"SELECT SUM(precio_unitario * cantidad) AS total_vendido
+FROM detalle_pedido
+JOIN pedidos ON detalle_pedido.pedido_id = pedidos.id
+JOIN productos ON detalle_pedido.producto_id = productos.id
+WHERE pedidos.estado = 'entregado'",,0,0.7009413770001629,True,True,False,1,242,60,302,0,0.7003209089998563,0.0,1.086e-05
+sin framework,D · evaluador-optimizador,normal,c03,compleja,"SELECT c.nombre
+FROM clientes c
+JOIN pedidos p ON c.id = p.cliente_id
+JOIN detalle_pedido dp ON p.id = dp.pedido_id
+WHERE p.estado = 'entregado'
+GROUP BY c.id
+ORDER BY SUM(dp.cantidad * dp.precio_unitario) DESC
+LIMIT 3",,0,0.828148519000024,True,True,False,1,243,72,315,0,0.827389416999722,0.0,1.1609999999999999e-05
+sin framework,D · evaluador-optimizador,normal,c04,compleja,"SELECT c.ciudad
+FROM clientes c
+JOIN pedidos p ON c.id = p.cliente_id
+WHERE p.estado IN ('entregado', 'pendiente', 'cancelado')
+GROUP BY c.ciudad
+ORDER BY COUNT(p.id) DESC
+LIMIT 1",,0,0.6917781049996847,True,True,False,1,230,62,292,0,0.6910996699998577,0.0,1.062e-05
+sin framework,D · evaluador-optimizador,normal,c05,compleja,"SELECT c.nombre, SUM(p.precio * dp.cantidad) as total
+FROM categorias c
+JOIN productos p ON c.id = p.categoria_id
+JOIN detalle_pedido dp ON p.id = dp.producto_id
+JOIN pedidos pe ON dp.pedido_id = pe.id
+WHERE pe.estado = 'entregado'
+GROUP BY c.nombre",,0,0.8891204880001169,True,True,False,1,245,78,323,0,0.8883010439994905,0.0,1.203e-05
+sin framework,D · evaluador-optimizador,normal,c06,compleja,"SELECT p.nombre
+FROM productos p
+JOIN detalle_pedido dp ON p.id = dp.producto_id
+JOIN pedidos pe ON dp.pedido_id = pe.id
+WHERE pe.estado IN ('entregado', 'pendiente', 'cancelado')
+GROUP BY p.id
+ORDER BY SUM(dp.cantidad) DESC
+LIMIT 1",,0,0.8310121519998575,True,True,False,1,238,74,312,0,0.8295714020005107,0.0,1.1579999999999998e-05
+sin framework,D · evaluador-optimizador,normal,c07,compleja,"SELECT c.nombre FROM clientes c
+WHERE c.id NOT IN (
+    SELECT p.cliente_id FROM pedidos p
+)",,0,0.3713229489994774,True,True,False,1,232,30,262,0,0.37080926900034683,0.0,8.759999999999999e-06
+sin framework,D · evaluador-optimizador,normal,c08,compleja,"SELECT AVG(precio_unitario * cantidad) AS promedio_pedido_entregado
+FROM detalle_pedido
+JOIN pedidos ON detalle_pedido.pedido_id = pedidos.id
+WHERE pedidos.estado = 'entregado'",,0,0.5770859229996859,True,False,False,1,239,50,289,0,0.5763748019999184,0.0,1.017e-05
+sin framework,D · evaluador-optimizador,normal,c09,compleja,"SELECT COUNT(DISTINCT c.id) 
+FROM clientes c 
+JOIN pedidos p ON c.id = p.cliente_id 
+JOIN detalle_pedido dp ON p.id = dp.pedido_id 
+JOIN productos pr ON dp.producto_id = pr.id 
+WHERE c.segmento = 'premium' 
+  AND c.ciudad LIKE 'Bogotá' 
+  AND p.estado = 'cancelado'",,0,0.9704631989998234,True,True,False,1,237,87,324,0,0.9692816289998518,0.0,1.2329999999999999e-05
+sin framework,D · evaluador-optimizador,normal,c10,compleja,"SELECT p.nombre FROM productos p
+WHERE p.id NOT IN (
+    SELECT dp.producto_id FROM detalle_pedido dp
+    JOIN pedidos p ON dp.pedido_id = p.id
+    WHERE p.estado IN ('entregado', 'pendiente', 'cancelado')
+)",,0,0.7042154079999818,True,True,False,1,232,62,294,0,0.7032965789994705,0.0,1.068e-05
+sin framework,D · evaluador-optimizador,normal,c11,compleja,"SELECT T2.segmento, COUNT(*) AS cantidad
+FROM pedidos AS T1
+JOIN clientes AS T2 ON T1.cliente_id = T2.id
+WHERE T1.estado IN ('entregado', 'pendiente', 'cancelado')
+GROUP BY T2.segmento",,0,0.7437967519999802,True,True,False,1,240,64,304,0,0.7426804140004606,0.0,1.104e-05
+sin framework,D · evaluador-optimizador,normal,c12,compleja,"SELECT c.nombre
+FROM clientes c
+JOIN pedidos p ON c.id = p.cliente_id
+JOIN detalle_pedido dp ON p.id = dp.pedido_id
+WHERE p.estado IN ('entregado', 'pendiente', 'cancelado')
+  AND c.segmento IN ('normal', 'premium')
+  AND c.ciudad LIKE 'Bogotá'
+  AND c.ciudad LIKE 'Medellín'
+  AND EXISTS (
+    SELECT 1
+    FROM categorias cat
+    WHERE cat.id = dp.producto_id
+      AND cat.nombre LIKE 'Electrónica'
+  )
+  AND dp.precio_unitario * dp.cantidad = (
+    SELECT MAX(precio_unitario * cantidad)
+    FROM detalle_pedido
+    WHERE p.estado IN ('entregado', 'pendiente', 'cancelado')
+      AND c.segmento IN ('normal', 'premium')
+      AND c.ciudad LIKE 'Bogotá'
+      AND c.ciudad LIKE 'Medellín'
+      AND EXISTS (
+        SELECT 1
+        FROM categorias cat
+        WHERE cat.id = dp.producto_id
+          AND cat.nombre LIKE 'Electrónica'
+      )
+  )",,2,17.84414369499973,True,False,False,3,1224,694,1918,1484,17.841618245000973,15.711441411001033,0.00013775999999999998
+sin framework,D · evaluador-optimizador,ruido,r01,simple,SELECT COUNT(*) FROM clientes WHERE ciudad = 'Medellín',,0,0.2407552989998294,True,True,False,1,229,18,247,0,0.2402314210003169,0.0,7.95e-06
+sin framework,D · evaluador-optimizador,ruido,r02,simple,SELECT COUNT(*) FROM pedidos WHERE estado = 'cancelado',,0,0.2332017150001775,True,True,False,1,227,18,245,0,0.2324736929995197,0.0,7.889999999999999e-06
+sin framework,D · evaluador-optimizador,ruido,r03,simple,"SELECT p.nombre
+FROM productos p
+JOIN detalle_pedido dp ON p.id = dp.producto_id
+JOIN pedidos pe ON dp.pedido_id = pe.id
+WHERE pe.estado IN ('entregado', 'pendiente', 'cancelado')
+  AND p.categoria_id IN (SELECT id FROM categorias WHERE nombre = 'Electrónica')
+  AND pe.fecha BETWEEN '2023-01-01' AND '2023-12-31'
+  AND p.precio * dp.cantidad > 1000000
+ORDER BY dp.cantidad DESC
+LIMIT 1",,2,10.496787480000421,True,False,False,3,1054,411,1465,1096,10.494470085000103,8.97832037399985,9.737999999999999e-05
+sin framework,D · evaluador-optimizador,ruido,r04,simple,SELECT COUNT(*) FROM clientes WHERE segmento = 'premium',,0,0.22731147800004692,True,True,False,1,228,17,245,0,0.2268132320004952,0.0,7.86e-06
+sin framework,D · evaluador-optimizador,ruido,r05,simple,"SELECT COUNT(*) 
+FROM pedidos 
+WHERE strftime('%m', fecha) = '03' AND strftime('%Y', fecha) = '2025'",,1,1.5187272180000946,True,True,False,2,535,72,607,336,1.517673943999398,1.106796115999714,3.162e-05
+sin framework,D · evaluador-optimizador,ruido,r06,simple,"SELECT COUNT(*) 
+FROM productos 
+WHERE precio > 500000",,0,0.302186356000675,True,True,False,1,232,23,255,0,0.30160842100031005,0.0,8.34e-06
+sin framework,D · evaluador-optimizador,ruido,r07,compleja,SELECT COUNT(*) FROM productos WHERE categoria_id IN (SELECT id FROM categorias WHERE nombre LIKE 'Electrónica'),,0,0.33784012399974017,True,True,False,1,227,28,255,0,0.33727559999988443,0.0,8.49e-06
+sin framework,D · evaluador-optimizador,ruido,r08,compleja,"SELECT c.ciudad
+FROM clientes c
+JOIN pedidos p ON c.id = p.cliente_id
+WHERE p.estado IN ('entregado', 'pendiente', 'cancelado')
+GROUP BY c.ciudad
+ORDER BY COUNT(p.id) DESC
+LIMIT 1",,0,0.6999430209998536,True,True,False,1,225,62,287,0,0.6986087779996524,0.0,1.047e-05
+sin framework,D · evaluador-optimizador,ruido,r09,compleja,"SELECT p.nombre, SUM(dp.cantidad) AS total_vendido
+FROM productos p
+JOIN detalle_pedido dp ON p.id = dp.producto_id
+JOIN pedidos pe ON dp.pedido_id = pe.id
+WHERE pe.estado IN ('entregado', 'pendiente', 'cancelado')
+  AND p.categoria_id IN (SELECT id FROM categorias WHERE nombre = 'Electrónica')
+  AND pe.fecha BETWEEN '2023-01-01' AND '2023-12-31'
+GROUP BY p.nombre
+ORDER BY total_vendido DESC
+LIMIT 1",,2,10.343374467999638,True,False,False,3,1034,405,1439,1078,10.339068838999992,8.865880872000162,9.575999999999999e-05
+sin framework,D · evaluador-optimizador,ruido,r10,compleja,"SELECT c.*
+FROM clientes c
+WHERE c.id NOT IN (
+    SELECT p.id
+    FROM productos p
+    JOIN detalle_pedido dp ON p.id = dp.producto_id
+)",,1,2.1289121890004026,True,False,False,2,528,88,616,344,2.127598060999844,1.5923925709994364,3.273e-05
+sin framework,D · evaluador-optimizador,ruido,r11,compleja,"SELECT p.*
+FROM productos p
+WHERE p.id NOT IN (
+    SELECT dp.producto_id
+    FROM detalle_pedido dp
+    WHERE dp.pedido_id IN (
+        SELECT p.id
+        FROM pedidos p
+        WHERE p.estado IN ('entregado', 'pendiente', 'cancelado')
+    )
+)",,0,0.8050997639993511,True,True,False,1,229,71,300,0,0.803764124000736,0.0,1.1129999999999998e-05
+sin framework,D · evaluador-optimizador,ruido,r12,compleja,"SELECT p.cliente_id, c.nombre, p.segmento, p.fecha
+FROM pedidos p
+JOIN clientes c ON p.cliente_id = c.id
+WHERE p.segmento IN ('normal', 'premium')
+  AND c.ciudad IN ('Bogotá', 'Medellín')
+  AND p.fecha LIKE '2023-01-%'
+  AND p.precio_unitario > 0",,2,6.819092069999897,False,False,False,3,918,276,1194,876,6.817567023000265,5.788117782999507,7.59e-05
+LangGraph,D · evaluador-optimizador,normal,s01,simple,SELECT COUNT(*) FROM clientes,,0,0.16997964099937235,True,True,False,1,228,11,239,0,0.16103614900021057,0.0,7.5e-06
+LangGraph,D · evaluador-optimizador,normal,s02,simple,SELECT COUNT(*) FROM clientes WHERE ciudad = 'Medellín',,0,0.2379554899998766,True,True,False,1,231,18,249,0,0.23523141100031353,0.0,8.01e-06
+LangGraph,D · evaluador-optimizador,normal,s03,simple,"SELECT p.nombre FROM productos p
+JOIN detalle_pedido dp ON p.id = dp.producto_id
+WHERE dp.precio_unitario = (SELECT MAX(precio_unitario) FROM detalle_pedido)",,0,0.5176477659997545,True,False,False,1,231,44,275,0,0.5151296479998564,0.0,9.57e-06
+LangGraph,D · evaluador-optimizador,normal,s04,simple,SELECT COUNT(*) FROM pedidos WHERE estado = 'cancelado',,0,0.23732859800020378,True,True,False,1,229,18,247,0,0.235258998000063,0.0,7.95e-06
+LangGraph,D · evaluador-optimizador,normal,s05,simple,SELECT nombre FROM productos WHERE stock < 10,,0,0.23459390300013183,True,True,False,1,234,16,250,0,0.2323938409999755,0.0,7.98e-06
+LangGraph,D · evaluador-optimizador,normal,s06,simple,"SELECT AVG(precio) AS precio_promedio
+FROM productos",,0,0.252643268000611,True,True,False,1,231,18,249,0,0.2502935370002888,0.0,8.01e-06
+LangGraph,D · evaluador-optimizador,normal,s07,simple,SELECT COUNT(*) FROM clientes WHERE segmento = 'premium',,0,0.22522787300022173,True,True,False,1,230,17,247,0,0.22228372500012483,0.0,7.92e-06
+LangGraph,D · evaluador-optimizador,normal,s08,simple,"SELECT COUNT(*) FROM pedidos WHERE strftime('%m', fecha) = '03' AND strftime('%Y', fecha) = '2025'",,1,1.7947856020000472,True,True,False,2,530,68,598,330,1.7898443510002835,1.3965595580002628,3.098999999999999e-05
+LangGraph,D · evaluador-optimizador,normal,s09,simple,SELECT DISTINCT ciudad FROM clientes,,0,0.17880307999985234,True,True,False,1,234,11,245,0,0.17610211800001707,0.0,7.68e-06
+LangGraph,D · evaluador-optimizador,normal,s10,simple,SELECT COUNT(*) FROM categorias,,0,0.17510758099979284,True,True,False,1,230,12,242,0,0.1721217379999871,0.0,7.619999999999999e-06
+LangGraph,D · evaluador-optimizador,normal,s11,simple,SELECT COUNT(*) FROM productos WHERE precio > 500000,,0,0.28617352899982507,True,True,False,1,238,21,259,0,0.28373069999997824,0.0,8.400000000000001e-06
+LangGraph,D · evaluador-optimizador,normal,s12,simple,"SELECT COUNT(*) FROM clientes WHERE strftime('%Y', fecha_registro) = '2025'",,1,1.2808005879996927,True,True,False,2,516,48,564,307,1.2755284990007567,0.986370523000005,2.832e-05
+LangGraph,D · evaluador-optimizador,normal,c01,compleja,SELECT COUNT(*) FROM productos WHERE categoria_id IN (SELECT id FROM categorias WHERE nombre LIKE 'Electrónica'),,0,0.3494770859997516,True,True,False,1,232,28,260,0,0.3472977669998727,0.0,8.64e-06
+LangGraph,D · evaluador-optimizador,normal,c02,compleja,"SELECT SUM(precio_unitario * cantidad) AS total_vendido
+FROM detalle_pedido
+JOIN pedidos ON detalle_pedido.pedido_id = pedidos.id
+JOIN productos ON detalle_pedido.producto_id = productos.id
+WHERE pedidos.estado = 'entregado'",,0,0.7188124240001343,True,True,False,1,242,60,302,0,0.7151770599994052,0.0,1.086e-05
+LangGraph,D · evaluador-optimizador,normal,c03,compleja,"SELECT c.nombre
+FROM clientes c
+JOIN pedidos p ON c.id = p.cliente_id
+JOIN detalle_pedido dp ON p.id = dp.pedido_id
+WHERE p.estado = 'entregado'
+GROUP BY c.id
+ORDER BY SUM(dp.cantidad * dp.precio_unitario) DESC
+LIMIT 3",,0,0.8515914619993055,True,True,False,1,243,72,315,0,0.8478309419997458,0.0,1.1609999999999999e-05
+LangGraph,D · evaluador-optimizador,normal,c04,compleja,"SELECT c.ciudad
+FROM clientes c
+JOIN pedidos p ON c.id = p.cliente_id
+WHERE p.estado IN ('entregado', 'pendiente', 'cancelado')
+GROUP BY c.ciudad
+ORDER BY COUNT(p.id) DESC
+LIMIT 1",,0,0.7098938009994527,True,True,False,1,230,62,292,0,0.7073994989996208,0.0,1.062e-05
+LangGraph,D · evaluador-optimizador,normal,c05,compleja,"SELECT c.nombre, SUM(p.precio * dp.cantidad) as total
+FROM categorias c
+JOIN productos p ON c.id = p.categoria_id
+JOIN detalle_pedido dp ON p.id = dp.producto_id
+JOIN pedidos pe ON dp.pedido_id = pe.id
+WHERE pe.estado = 'entregado'
+GROUP BY c.nombre",,0,0.919558520999999,True,True,False,1,245,78,323,0,0.915317564000361,0.0,1.203e-05
+LangGraph,D · evaluador-optimizador,normal,c06,compleja,"SELECT p.nombre
+FROM productos p
+JOIN detalle_pedido dp ON p.id = dp.producto_id
+JOIN pedidos pe ON dp.pedido_id = pe.id
+WHERE pe.estado IN ('entregado', 'pendiente', 'cancelado')
+GROUP BY p.id
+ORDER BY SUM(dp.cantidad) DESC
+LIMIT 1",,0,0.854727683999954,True,True,False,1,238,74,312,0,0.8510137479997866,0.0,1.1579999999999998e-05
+LangGraph,D · evaluador-optimizador,normal,c07,compleja,"SELECT c.nombre FROM clientes c
+WHERE c.id NOT IN (
+    SELECT p.cliente_id FROM pedidos p
+)",,0,0.38439027599997644,True,True,False,1,232,30,262,0,0.38207728100042004,0.0,8.759999999999999e-06
+LangGraph,D · evaluador-optimizador,normal,c08,compleja,"SELECT AVG(precio_unitario * cantidad) AS promedio_pedido_entregado
+FROM detalle_pedido
+JOIN pedidos ON detalle_pedido.pedido_id = pedidos.id
+WHERE pedidos.estado = 'entregado'",,0,0.5988515369999732,True,False,False,1,239,50,289,0,0.5964636729995618,0.0,1.017e-05
+LangGraph,D · evaluador-optimizador,normal,c09,compleja,"SELECT COUNT(DISTINCT c.id) 
+FROM clientes c 
+JOIN pedidos p ON c.id = p.cliente_id 
+JOIN detalle_pedido dp ON p.id = dp.pedido_id 
+JOIN productos pr ON dp.producto_id = pr.id 
+WHERE c.segmento = 'premium' 
+  AND c.ciudad LIKE 'Bogotá' 
+  AND p.estado = 'cancelado'",,0,0.9959160090002115,True,True,False,1,237,87,324,0,0.9935646720005025,0.0,1.2329999999999999e-05
+LangGraph,D · evaluador-optimizador,normal,c10,compleja,"SELECT p.nombre FROM productos p
+WHERE p.id NOT IN (
+    SELECT dp.producto_id FROM detalle_pedido dp
+    JOIN pedidos p ON dp.pedido_id = p.id
+    WHERE p.estado IN ('entregado', 'pendiente', 'cancelado')
+)",,0,0.7304957349997494,True,True,False,1,232,62,294,0,0.7270891689995551,0.0,1.068e-05
+LangGraph,D · evaluador-optimizador,normal,c11,compleja,"SELECT T2.segmento, COUNT(*) AS cantidad
+FROM pedidos AS T1
+JOIN clientes AS T2 ON T1.cliente_id = T2.id
+WHERE T1.estado IN ('entregado', 'pendiente', 'cancelado')
+GROUP BY T2.segmento",,0,0.7608793789995616,True,True,False,1,240,64,304,0,0.758523501000127,0.0,1.104e-05
+LangGraph,D · evaluador-optimizador,normal,c12,compleja,"SELECT c.nombre
+FROM clientes c
+JOIN pedidos p ON c.id = p.cliente_id
+JOIN detalle_pedido dp ON p.id = dp.pedido_id
+WHERE p.estado IN ('entregado', 'pendiente', 'cancelado')
+  AND c.segmento IN ('normal', 'premium')
+  AND c.ciudad LIKE 'Bogotá'
+  AND c.ciudad LIKE 'Medellín'
+  AND EXISTS (
+    SELECT 1
+    FROM categorias cat
+    WHERE cat.id = dp.producto_id
+      AND cat.nombre LIKE 'Electrónica'
+  )
+  AND dp.precio_unitario * dp.cantidad = (
+    SELECT MAX(precio_unitario * cantidad)
+    FROM detalle_pedido
+    WHERE p.estado IN ('entregado', 'pendiente', 'cancelado')
+      AND c.segmento IN ('normal', 'premium')
+      AND c.ciudad LIKE 'Bogotá'
+      AND c.ciudad LIKE 'Medellín'
+      AND EXISTS (
+        SELECT 1
+        FROM categorias cat
+        WHERE cat.id = dp.producto_id
+          AND cat.nombre LIKE 'Electrónica'
+      )
+  )",,2,17.162206415000583,True,False,False,3,1224,694,1918,1484,17.154908096000327,14.961844833000214,0.00013775999999999998
+LangGraph,D · evaluador-optimizador,ruido,r01,simple,SELECT COUNT(*) FROM clientes WHERE ciudad = 'Medellín',,0,0.23739651999949274,True,True,False,1,229,18,247,0,0.23483656699954736,0.0,7.95e-06
+LangGraph,D · evaluador-optimizador,ruido,r02,simple,SELECT COUNT(*) FROM pedidos WHERE estado = 'cancelado',,0,0.23612283000056777,True,True,False,1,227,18,245,0,0.23371771500023897,0.0,7.889999999999999e-06
+LangGraph,D · evaluador-optimizador,ruido,r03,simple,"SELECT p.nombre
+FROM productos p
+JOIN detalle_pedido dp ON p.id = dp.producto_id
+JOIN pedidos pe ON dp.pedido_id = pe.id
+WHERE pe.estado IN ('entregado', 'pendiente', 'cancelado')
+  AND p.categoria_id IN (SELECT id FROM categorias WHERE nombre = 'Electrónica')
+  AND pe.fecha BETWEEN '2023-01-01' AND '2023-12-31'
+  AND p.precio * dp.cantidad > 1000000
+ORDER BY dp.cantidad DESC
+LIMIT 1",,2,10.227227630000016,True,False,False,3,1054,411,1465,1096,10.219716995999079,8.681940186999782,9.737999999999999e-05
+LangGraph,D · evaluador-optimizador,ruido,r04,simple,SELECT COUNT(*) FROM clientes WHERE segmento = 'premium',,0,0.23001328899954387,True,True,False,1,228,17,245,0,0.22739648399965517,0.0,7.86e-06
+LangGraph,D · evaluador-optimizador,ruido,r05,simple,"SELECT COUNT(*) 
+FROM pedidos 
+WHERE strftime('%m', fecha) = '03' AND strftime('%Y', fecha) = '2025'",,1,1.8853474560000905,True,True,False,2,535,72,607,336,1.8809803660005855,1.4611691670006621,3.162e-05
+LangGraph,D · evaluador-optimizador,ruido,r06,simple,"SELECT COUNT(*) 
+FROM productos 
+WHERE precio > 500000",,0,0.3087063329994635,True,True,False,1,232,23,255,0,0.30649712099966564,0.0,8.34e-06
+LangGraph,D · evaluador-optimizador,ruido,r07,compleja,SELECT COUNT(*) FROM productos WHERE categoria_id IN (SELECT id FROM categorias WHERE nombre LIKE 'Electrónica'),,0,0.3489204540001083,True,True,False,1,227,28,255,0,0.34665592900000775,0.0,8.49e-06
+LangGraph,D · evaluador-optimizador,ruido,r08,compleja,"SELECT c.ciudad
+FROM clientes c
+JOIN pedidos p ON c.id = p.cliente_id
+WHERE p.estado IN ('entregado', 'pendiente', 'cancelado')
+GROUP BY c.ciudad
+ORDER BY COUNT(p.id) DESC
+LIMIT 1",,0,0.716857438000261,True,True,False,1,225,62,287,0,0.7143933759998617,0.0,1.047e-05
+LangGraph,D · evaluador-optimizador,ruido,r09,compleja,"SELECT p.nombre, SUM(dp.cantidad) AS total_vendido
+FROM productos p
+JOIN detalle_pedido dp ON p.id = dp.producto_id
+JOIN pedidos pe ON dp.pedido_id = pe.id
+WHERE pe.estado IN ('entregado', 'pendiente', 'cancelado')
+  AND p.categoria_id IN (SELECT id FROM categorias WHERE nombre = 'Electrónica')
+  AND pe.fecha BETWEEN '2023-01-01' AND '2023-12-31'
+GROUP BY p.nombre
+ORDER BY total_vendido DESC
+LIMIT 1",,2,10.399238799999694,True,False,False,3,1034,405,1439,1078,10.392817403999288,8.862637027998971,9.575999999999999e-05
+LangGraph,D · evaluador-optimizador,ruido,r10,compleja,"SELECT c.*
+FROM clientes c
+WHERE c.id NOT IN (
+    SELECT cliente_id
+    FROM pedidos
+)",,1,1.7679822250001962,True,True,False,2,528,74,602,330,1.7622899000007237,1.21952805500041,3.105e-05
+LangGraph,D · evaluador-optimizador,ruido,r11,compleja,"SELECT p.*
+FROM productos p
+WHERE p.id NOT IN (
+    SELECT dp.producto_id
+    FROM detalle_pedido dp
+    WHERE dp.pedido_id IN (
+        SELECT p.id
+        FROM pedidos p
+        WHERE p.estado IN ('entregado', 'pendiente', 'cancelado')
+    )
+)",,0,0.8139931059995433,True,True,False,1,229,71,300,0,0.8115103270001782,0.0,1.1129999999999998e-05
+LangGraph,D · evaluador-optimizador,ruido,r12,compleja,"SELECT p.cliente_id, c.nombre, p.segmento, p.fecha
+FROM pedidos p
+JOIN clientes c ON p.cliente_id = c.id
+WHERE p.segmento IN ('normal', 'premium')
+  AND c.ciudad IN ('Bogotá', 'Medellín')
+  AND p.fecha LIKE '2023-01-%'
+  AND p.precio_unitario > 0",,2,6.945447086000058,False,False,False,3,918,276,1194,876,6.93602552899938,5.8925311160001,7.59e-05

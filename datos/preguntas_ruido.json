@@ -1,0 +1,14 @@
+[
+  {"id": "r01", "base": "s02", "nivel": "simple", "pregunta": "cuantos clientes hay en medellin??"},
+  {"id": "r02", "base": "s04", "nivel": "simple", "pregunta": "numero de pedidos q se cancelaron"},
+  {"id": "r03", "base": "s03", "nivel": "simple", "pregunta": "cual es el prodcto mas carro de la tienda"},
+  {"id": "r04", "base": "s07", "nivel": "simple", "pregunta": "y clientes premiun cuantos son"},
+  {"id": "r05", "base": "s08", "nivel": "simple", "pregunta": "pedidos hechos en el mes de marzo del 2025, cuantos"},
+  {"id": "r06", "base": "s11", "nivel": "simple", "pregunta": "cuantos productos valen mas de 500 mil"},
+  {"id": "r07", "base": "c01", "nivel": "compleja", "pregunta": "cuantos productos de electronica tenemos"},
+  {"id": "r08", "base": "c04", "nivel": "compleja", "pregunta": "ciudad con mas pedidos"},
+  {"id": "r09", "base": "c06", "nivel": "compleja", "pregunta": "el producto que mas unidades vendio"},
+  {"id": "r10", "base": "c07", "nivel": "compleja", "pregunta": "clientes q no han comprado nunca nada"},
+  {"id": "r11", "base": "c10", "nivel": "compleja", "pregunta": "q productos no se han vendido ni una vez"},
+  {"id": "r12", "base": "c11", "nivel": "compleja", "pregunta": "pedidos por segmento d cliente"}
+]

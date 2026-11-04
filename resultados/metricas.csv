@@ -1,0 +1,11 @@
+implementación,configuración,exactitud %,exactitud simples %,exactitud complejas %,tokens/tarea,llamadas LLM/tarea,USD por millón de tareas*,latencia media s,latencia p95 s,overhead no-LLM ms,exactitud con ruido %,SQL inválido %,caídas del sistema,% tokens coordinación,% tiempo coordinación,correcciones/tarea,acierto del router %
+sin framework,A · único 1.5b,79.17,75.0,83.33,279.17,1.0,9.71,0.52,0.96,0.25,58.33,16.67,0,0.0,0.0,0.0,
+sin framework,B · único 3b,87.5,100.0,75.0,269.92,1.0,18.31,1.12,2.17,0.35,100.0,0.0,0,0.0,0.0,0.0,
+sin framework,C · router,83.33,83.33,83.33,522.62,2.0,24.25,1.0,2.36,0.5,75.0,16.67,0,37.99,9.84,0.0,87.5
+sin framework,D · evaluador-optimizador,87.5,91.67,83.33,350.5,1.17,14.81,1.0,1.71,0.8,75.0,2.78,0,20.35,45.94,0.17,
+sin framework,E · router + evaluador,91.67,100.0,83.33,564.04,2.12,27.0,1.15,2.57,1.0,83.33,5.56,0,42.54,23.22,0.12,87.5
+LangGraph,A · único 1.5b,79.17,75.0,83.33,279.17,1.0,9.71,0.55,1.0,2.05,58.33,16.67,0,0.0,0.0,0.0,
+LangGraph,B · único 3b,87.5,100.0,75.0,269.92,1.0,18.31,1.13,2.2,1.71,100.0,0.0,0,0.0,0.0,0.0,
+LangGraph,C · router,83.33,83.33,83.33,522.62,2.0,24.25,0.99,2.33,2.8,75.0,16.67,0,37.99,9.84,0.0,87.5
+LangGraph,D · evaluador-optimizador,87.5,91.67,83.33,350.5,1.17,14.81,1.01,1.74,3.72,66.67,2.78,0,20.35,45.6,0.17,
+LangGraph,E · router + evaluador,91.67,100.0,83.33,564.04,2.12,27.0,1.18,2.71,4.43,83.33,5.56,0,42.54,22.76,0.12,87.5
